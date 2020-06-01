@@ -73,11 +73,14 @@ class HP_OT_rotate_90_and_flatten(bpy.types.Operator):
 					print('Object Mode')
 #Rotate 90
 		if self.direction == 'RZ':
-			bpy.ops.transform.rotate(value=1.5708, orient_axis='Z', constraint_axis=(False, False, True), orient_matrix_type='GLOBAL')
+			bpy.ops.transform.rotate(value=1.5708, orient_axis='Z', orient_type='GLOBAL', orient_matrix_type='GLOBAL', constraint_axis=(False, False, True))
 		if self.direction == 'RY':
-			bpy.ops.transform.rotate(value=1.5708, orient_axis='Y', constraint_axis=(False, True, False), orient_matrix_type='GLOBAL')
+			bpy.ops.transform.rotate(value=1.5708, orient_axis='Y', orient_type='GLOBAL', orient_matrix_type='GLOBAL', constraint_axis=(False, True, False))
 		if self.direction == 'RX':
-			bpy.ops.transform.rotate(value=1.5708, orient_axis='X', constraint_axis=(True, False, False), orient_matrix_type='GLOBAL')
+			bpy.ops.transform.rotate(value=1.5708, orient_axis='X', orient_type='GLOBAL', orient_matrix_type='GLOBAL', constraint_axis=(True, False, False))
+
+
+#bpy.ops.transform.rotate(value=1.5708, orient_axis='Z',  orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(False, False, True))
 
 
 #Flattens
@@ -97,7 +100,7 @@ classes = (
 	HP_MT_pie_rotate90,
 	HP_OT_rotate_90_and_flatten
 )
-register, unregister = bpy.utils.register_classes_factory(classes)  
+register, unregister = bpy.utils.register_classes_factory(classes)	
 
 if __name__ == "__main__":
 	register()

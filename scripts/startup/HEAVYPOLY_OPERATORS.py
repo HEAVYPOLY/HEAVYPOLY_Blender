@@ -83,24 +83,37 @@ class HP_OT_smart_snap_cursor(bpy.types.Operator):
 
 class HP_OT_smart_snap_origin_collection(bpy.types.Operator):
     bl_idname = "view3d.smart_snap_origin_collection"        # unique identifier for buttons and menu items to reference.
-    bl_label = ""         # display name in the interface.
+    bl_label = "Smart Snap Origin Collection"         # display name in the interface.
     bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
     def invoke(self, context, event):
+        print('smartsnaporigincollection')
         try:
             if context.active_object.mode == 'EDIT':
                 if context.active_object.type == 'MESH':
-                    if  context.object.data.total_vert_sel == 0:  #If Nothing Selected
+                    if  context.object.data.total_vert_sel == 0:
                         bpy.ops.view3d.snap_cursor_to_center()
-                        bpy.ops.object.instance_offset_from_cursor()
+                        bpy.ops.object.mode_set(mode='OBJECT')
+                        bpy.ops.object.origin_set(type = 'ORIGIN_CURSOR')
+                        bpy.ops.object.mode_set(mode='EDIT')
                     else:
-                        print('Offsetting from selected')
                         bpy.ops.view3d.snap_cursor_to_selected()
+                        bpy.ops.object.mode_set(mode='OBJECT')
                         bpy.ops.object.instance_offset_from_cursor()
+                        bpy.ops.object.mode_set(mode='EDIT')
                 else:
                     bpy.ops.view3d.snap_cursor_to_selected()
                     bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
-                    bpy.ops.object.instance_offset_from_cursor()
+                    bpy.ops.object.origin_set(type = 'ORIGIN_CURSOR')
+                    #bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
                     bpy.ops.object.mode_set(mode='EDIT', toggle=False)
+            elif len(bpy.context.selected_objects) > 0:
+                bpy.ops.view3d.snap_cursor_to_selected()
+                bpy.ops.object.instance_offset_from_cursor()
+            else:
+                #bpy.ops.view3d.snap_cursor_to_center()
+                #bpy.ops.object.origin_set(type = 'ORIGIN_CURSOR')
+                bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            #bpy.context.scene.tool_settings.transform_pivot_point = 'MEDIAN_POINT'
         except:
             return {'FINISHED'}
         return {'FINISHED'}
@@ -109,6 +122,7 @@ class HP_OT_smart_snap_origin(bpy.types.Operator):
     bl_label = ""         # display name in the interface.
     bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
     def invoke(self, context, event):
+        print('smartsnaporigin')
         try:
             if context.active_object.mode == 'EDIT':
                 if context.active_object.type == 'MESH':
@@ -295,7 +309,8 @@ class HP_OT_SmartBevel(bpy.types.Operator):
 
     def invoke(self, context, event):
         if context.active_object.mode == 'OBJECT':
-            bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
+            print('Only works in Edit Mode')
+            #bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
         else:
             me = bpy.context.object.data
             bm = bmesh.from_edit_mesh(me)
@@ -304,7 +319,8 @@ class HP_OT_SmartBevel(bpy.types.Operator):
                 if v.select:
                     sel.append(v)
             if len(sel) == 0:
-                bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
+                print('Nothing Selected')
+                # bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
             else:
                 if tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (True, False, False):
                     bpy.ops.mesh.bevel('INVOKE_DEFAULT',clamp_overlap=True, vertex_only=True)
@@ -475,6 +491,21 @@ class HP_OT_DeleteWithoutPrompt(bpy.types.Operator):
         bpy.ops.object.delete()
         return {'FINISHED'}
 
+
+class HP_OT_SetCollectionCenter(bpy.types.Operator):
+    bl_idname = "view3d.hp_set_collection_center"         # unique identifier for buttons and menu items to reference.
+    bl_label = "Set Collection Center"       # display name in the interface.
+    bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
+
+    def execute(self, context):
+        ## 1 Save selection
+        bpy.ops.view3d.snap_cursor_to_selected()
+        #bpy.ops.view3d.snap_cursor_to_selected()
+       # bpy.ops.object.instance_offset_from_cursor()
+        return {'FINISHED'}
+
+
+
 classes = (
     HP_OT_SaveWithoutPrompt,
     HP_OT_RevertWithoutPrompt,
@@ -492,7 +523,8 @@ classes = (
     HP_OT_extrude,
     HP_OT_loopcut,
     HP_OT_SmartScale,
-    HP_OT_unhide
+    HP_OT_unhide,
+    HP_OT_SetCollectionCenter
 )
 register, unregister = bpy.utils.register_classes_factory(classes)
 

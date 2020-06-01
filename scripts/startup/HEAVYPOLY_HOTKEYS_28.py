@@ -3,7 +3,7 @@ bl_info = {
     "description": "Hotkeys",
     "author": "Vaughan Ling",
     "version": (0, 1, 0),
-    "blender": (2, 80, 0),
+    "blender": (2, 90, 0),
     "location": "",
     "warning": "",
     "wiki_url": "",
@@ -242,7 +242,7 @@ def Keymap_Heavypoly():
 #Object Mode
     km = kc.keymaps.new(name='Object Mode')
     Global_Keys()    
-    kmi = km.keymap_items.new('view3d.smart_bevel','B', 'PRESS')
+    # kmi = km.keymap_items.new('view3d.smart_bevel','B', 'PRESS')
     #kmi = km.keymap_items.new('object.select_all', k_select, 'CLICK_DRAG')
     #kmi_props_setattr(kmi.properties, 'action', 'DESELECT')
 #    kmi = km.keymap_items.new('object.select_all', k_select, 'CLICK', ctrl=True)

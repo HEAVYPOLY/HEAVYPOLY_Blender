@@ -18,8 +18,8 @@ class jmPipeTool(bpy.types.Operator):
     bl_idname = "object.quickpipe"
     bl_label = "Quick Pipe"
 
-    first_mouse_x = IntProperty()
-    first_value = FloatProperty()
+    first_mouse_x: IntProperty()
+    first_value: FloatProperty()
 #   : bpy.props.StringProperty(name='Duplicate')
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':

@@ -37,12 +37,13 @@ def draw_callback_px(self, context):
     blf.size(font_id, 20, 42)
     for l in lines:
         blf.position(font_id, 30, (y + y_offset), 0)
+        blf.color(font_id,.02,.02,.02,1)
         blf.draw(font_id, l)
         y_offset += 30
-    if self.dragging:
-        if self.shape == 'circle':
-            blf.position(font_id, 300, 30, 0)
-            blf.draw(font_id, 'A / D = Resolution = ' + str(self.res*100) + '%')    
+    # if self.dragging:
+        # if self.shape == 'circle':
+            # blf.position(font_id, 300, 30, 0)
+            # blf.draw(font_id, 'A / D = Resolution = ' + str(self.res*100) + '%')    
 
     blf.size(font_id, 20, 72)
     blf.position(font_id, 30, y_offset + 60, 0)
@@ -52,73 +53,7 @@ class VIEW3D_PT_hp_draw(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = "HP Draw"
     bl_label = "HP Draw"
-
-    def draw(self, context):
-        layout = self.layout
-        row = layout.row()
-        col = row.column(align=True)
-        col.label(text='DRAW PROPERTIES')
-        row = layout.row()
-         #Vertex Color
-        ob = context.object
-        box = col.box()
-        box.label(text = 'MATERIAL LIBRARY')
-        box.template_ID(ob, "active_material")
-        col.separator()
-#       col.template_list("", "vcols", me, "vertex_colors", me.vertex_colors, "active_index", rows=1)
-#        col.operator("mesh.vertex_color_add", icon='ZOOMIN', text="")
-#        col.operator("mesh.vertex_color_remove", icon='ZOOMOUT', text="")
-
-        #Material Slots
-        rows=6
-
-        actob = context.active_object
-        box = col.box()
-        box.label(text = 'MATERIAL SLOTS')
-        row = box.row()
-        
-        sub = row.column()
-        sub.template_list("MATERIAL_UL_matslots", "", ob, "material_slots", ob, "active_material_index", rows=rows)
-        sub = row.column()
-  
-
-        sub.operator("3dview.material_slot_add", icon='ADD', text="")   
-        sub.operator("3dview.material_slot_remove", icon='REMOVE', text="")
-        sub.operator("object.material_slot_move", icon='TRIA_UP', text="").direction='UP'
-        sub.operator("object.material_slot_move", icon='TRIA_DOWN', text="").direction='DOWN'
-        box.operator("object.material_slot_assign", text="Assign Selection to Slot")
-        
-        col.separator()
-        col.operator('3dview.material_new', icon='NONE', text='New Material')
-        col.operator('3dview.material_copy', icon='NONE', text='Duplicate Material')
-        col.operator('3dview.material_delete', icon='NONE', text='Delete Material')
-        col.operator('ui.eyedropper_id', icon='NONE', text='Eyedropper')
-
-        # if tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (False, False, True):
-            # col.operator("mesh.select_similar", text='Select Elements by Slot').type = 'MATERIAL'
-        mat = bpy.context.object.active_material
-        col.separator()
-        col.prop(mat, "blend_method",text='')
-        col.prop(mat, "shadow_method",text='')
-        col.prop(mat, "refraction_depth",text='')
-        col.row().prop(mat, "use_screen_refraction")
-        col.row().prop(mat, "use_sss_translucency")
-        col.separator()
-        col.label(text = 'VERTEX COLOR (for _V materials)')
-        ts = context.tool_settings
-        ups = ts.unified_paint_settings
-        ptr = ups if ups.use_unified_color else ts.vertex_paint.brush
-        col.template_color_picker(ptr, 'color', value_slider=True)
-        col.prop(ptr, 'color', text='')
-    
-        if bpy.context.object.type == 'MESH':
-            col.operator("mesh.material_apply", text='Apply Vertex Color')
-            col.operator("mesh.select_vertex_color", text='Select by Vertex Color')
-            col.operator("ui.eyedropper_id", text='Eyedropper')
-            
-            me = bpy.context.active_object.data
-            col.template_list("MESH_UL_vcols", "vcols", me, "vertex_colors", me.vertex_colors, "active_index", rows=1)
-        col.separator()                
+             
 
 class HP_OT_draw_primitives(bpy.types.Operator):
     """Draw a line with the mouse"""
@@ -126,7 +61,6 @@ class HP_OT_draw_primitives(bpy.types.Operator):
     bl_label = "Draw Primitives"
     
     def invoke(self, context, event):
-
         args = (self, context)
         self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         self.verts = []
@@ -145,6 +79,8 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         self.first_hit = None
         self.first_mouse_x = event.mouse_x
         self.first_mouse_y = event.mouse_y
+        self.first_mouse_res_x = event.mouse_x
+        self.first_mouse_res_y = event.mouse_y
         self.solidify_value = 0.0
         self.offset = .001
         self.hit = None
@@ -155,7 +91,7 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         self.face_index = None
         self.originfound = False
         self.vector = None
-        self.live = 'YES'
+        self.live = 'NO'
         self.shape = 'box'
         self.rotate = False
         self.normalsflipped = False
@@ -167,6 +103,8 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         self.value = bpy.data.brushes["Draw"].color.v
         context.window_manager.modal_handler_add(self)
         self.bvhtree = self.bvhtree_from_object(context, context.active_object)
+        self.drawbox = None
+        self.data_to_remove = []
         return {'RUNNING_MODAL'}
 
     def modal(self, context, event):
@@ -197,24 +135,49 @@ class HP_OT_draw_primitives(bpy.types.Operator):
             def finish_box():
                 if len(bpy.context.object.data.vertices) != 0:
                     if len(bpy.context.object.modifiers) > 0:
-                        bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Solidify")
-                    self.initial_ob.select_set(state=True)
-                    rvalue = random.random()
-                    bpy.ops.paint.vertex_paint_toggle()
-                    bpy.ops.paint.vertex_color_set()
+                        bpy.ops.object.convert(target='MESH')
+                    cur_ob = bpy.ops.object
+                    # rvalue = random.random()
+                    # bpy.ops.paint.vertex_paint_toggle()
+                    # bpy.ops.paint.vertex_color_set()
                     #bpy.ops.paint.vertex_color_hsv(h=rvalue)
                     bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+                    self.initial_ob.select_set(state=True)
                     bpy.context.view_layer.objects.active = self.initial_ob
                     bpy.ops.object.parent_set(type='OBJECT', keep_transform=True)
+                    # bpy.obs.object.to_mesh_clear()
+                    # bpy.ops.object.select_set(state=True)
                     if self.bool == 'None':
+                        print(cur_ob.data)
                         bpy.ops.object.join()
+                        # bpy.context.view_layer.update()
+                                    
+                        # self.data_to_remove.append(cur_ob.data)
+                        # for block in bpy.data.meshes:
+                            # if block.users == 0:
+                                # print('removed ', block)
+                                # bpy.data.meshes.remove(block)
+                        # for block in bpy.data.materials:
+                            # if block.users == 0:
+                                # bpy.data.materials.remove(block)
+
+                        # for block in bpy.data.textures:
+                            # if block.users == 0:
+                                # bpy.data.textures.remove(block)
+
+                        # for block in bpy.data.images:
+                            # if block.users == 0:
+                                # bpy.data.images.remove(block)
+                        # self.initial_ob.select_set(state=True)
+                        # invoke(self, context, event)
+                        bpy.context.view_layer.update()
                     if self.bool == 'Subtract':
                         bpy.ops.view3d.hp_boolean_live(live = self.live, bool_operation = 'DIFFERENCE')
                     if self.bool == 'Add':
                         bpy.ops.view3d.hp_boolean_live(live = self.live, bool_operation = 'UNION')
                     if self.bool == 'Wrap':
                         bpy.ops.view3d.hp_boolean_live(live = self.live, bool_operation = 'WRAP')
-                    bpy.ops.view3d.smart_shade_smooth_toggle('INVOKE_DEFAULT')
+                    # bpy.ops.view3d.smart_shade_smooth_toggle('INVOKE_DEFAULT')
                 else:
                     bpy.ops.view3d.smart_delete('INVOKE_DEFAULT')
                     self.initial_ob.select_set(state=True)
@@ -222,11 +185,14 @@ class HP_OT_draw_primitives(bpy.types.Operator):
                 self.verts = []
                 self.hit_saved = self.hit
                 self.normal_saved = self.normal
-                self.bvhtree = self.bvhtree_from_object(context, context.active_object)
+                
                 self.originfound = False
                 self.mode = 'Draw'
                 self.click = False
                 self.colormode = 'sat'
+                # self.initial_ob.select_set(state=True)
+
+                self.bvhtree = self.bvhtree_from_object(context, context.active_object)
                 bpy.ops.ed.undo_push(message="Box Drawn")
                 print('Box Drawn')
             context.area.tag_redraw()
@@ -234,6 +200,8 @@ class HP_OT_draw_primitives(bpy.types.Operator):
             
             if event.type in {'RIGHTMOUSE', 'ESC', 'SPACE'}:
                 if event.value == 'PRESS':
+
+                    bpy.context.view_layer.update()
                     bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
                     return {'FINISHED'}
             
@@ -251,9 +219,12 @@ class HP_OT_draw_primitives(bpy.types.Operator):
             if event.type in {"MIDDLEMOUSE", "V", "Z","WHEELUPMOUSE", "WHEELDOWNMOUSE", "E", "SPACE"}:
                 return {"PASS_THROUGH"}
             if event.value == 'PRESS':
-                if event.type in {'D', 'WHEELUPMOUSE'}:
-                    self.res += .05
-                if event.type in {'A', 'WHEELDOWNMOUSE'}:
+                # if event.type == 'R':
+                    # self.first_mouse_res_x = event.mouse_x
+                    # self.first_mouse_res_y = event.mouse_y
+                    # self.mode = 'Resolution'
+                    
+                if event.type in {'F', 'WHEELDOWNMOUSE'}:
                     if len(self.create_mesh_verts(self.verts[1], self.verts[-1], self.shape)) > 4:
                         self.res -= .05
                 if event.type == 'E':
@@ -332,6 +303,8 @@ class HP_OT_draw_primitives(bpy.types.Operator):
                             bpy.context.object.modifiers["Solidify"].thickness = -self.thickness_delta * 0.002
                         else:
                             bpy.context.object.modifiers["Solidify"].thickness = self.thickness_delta * 0.002
+                # if self.mode == 'Resolution':
+                    # self.res == .5
                 if self.mode == 'Rotate':
                     if self.originfound == False:
                         bpy.ops.view3d.smart_snap_origin('INVOKE_DEFAULT')
@@ -365,15 +338,32 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         except:
             bpy.types.SpaceView3D.draw_handler_remove(self._handle, 'WINDOW')
             return {'FINISHED'}
-
+    def create_mesh(self, verts):
+        bm = bmesh.new()
+        for v in verts:
+            bm.verts.new(v)
+        bm.faces.new(bm.verts)
+        # bm.update()
+        bm.to_mesh(bpy.context.object.data)
+        bm.free()
+        
+        # self.new_face_normal = bpy.context.object.data.polygons[0].normal
+        # if (abs(self.normal.x - self.new_face_normal.x)+abs(self.normal.y - self.new_face_normal.y)+abs(self.normal.z - self.new_face_normal.z)) > .1:
+            # self.normalsflipped = not self.normalsflipped
+        
+        # bpy.ops.object.mode_set(mode='VERTEX_PAINT', toggle=False)
+        # bpy.ops.paint.vertex_color_set()   
+        # bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+        
     def create_object(self):
         mesh = bpy.data.meshes.new("Draw_Box")
-        obj  = bpy.data.objects.new("Draw_Box", mesh)
-        bpy.context.scene.collection.objects.link(obj)
-        bpy.context.view_layer.objects.active = obj
-        bpy.context.object.active_material = bpy.data.materials['Diffuse_V']
+        self.draw_box = bpy.data.objects.new("Draw_Box", mesh)
+        bpy.context.scene.collection.objects.link(self.draw_box)
+        bpy.context.view_layer.objects.active = self.draw_box
+        # bpy.context.view_layer.update()
+        # bpy.context.object.active_material = bpy.data.materials['Diffuse_V']
         bpy.ops.object.select_all(action='DESELECT')
-        obj.select_set(state=True)
+        self.draw_box.select_set(state=True)
         
     def create_mesh_verts(self, verts, shape):
         click1 = verts[0]
@@ -417,27 +407,30 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         if shape == 'polyline':
             return verts
 
-    def create_mesh(self, verts):
-        bm = bmesh.new()
-        for v in verts:
-            bm.verts.new(v)
-        bm.faces.new(bm.verts)
-        bm.to_mesh(bpy.context.object.data)
-        bm.free()
-        self.new_face_normal = bpy.context.object.data.polygons[0].normal
-        if (abs(self.normal.x - self.new_face_normal.x)+abs(self.normal.y - self.new_face_normal.y)+abs(self.normal.z - self.new_face_normal.z)) > .1:
-            self.normalsflipped = not self.normalsflipped
-        bpy.ops.object.mode_set(mode='VERTEX_PAINT', toggle=False)
-        bpy.ops.paint.vertex_color_set()   
-        bpy.ops.object.mode_set(mode='OBJECT', toggle=False)
+
+        
+        
     def bvhtree_from_object(self, context, object):
-        bm = bmesh.new()
-        mesh = object.to_mesh()
-        bm.from_mesh(mesh)
-        bm.transform(object.matrix_world)
-        bvhtree = BVHTree.FromBMesh(bm)
-        bm.free()
-        return bvhtree
+        # bm = bmesh.new()
+        # mesh = object.to_mesh()
+        # bm.from_mesh(mesh)
+        # bm.transform(object.matrix_world)
+        
+        # bvhtree = BVHTree.FromBMesh(bm)
+        
+        
+        # object.data.transform(object.matrix_world)
+
+        # bpy.context.view_layer.depsgraph.update()
+        # bm.free()
+
+        # bvhtree = BVHTree.FromObject(object, bpy.context.view_layer.depsgraph )
+        
+        snapSurface = object
+        context.view_layer.depsgraph.objects[snapSurface.name].data.transform(snapSurface.matrix_world)
+        sourceSurface_BVHT = BVHTree.FromObject(snapSurface, context.view_layer.depsgraph)
+        context.view_layer.depsgraph.objects[snapSurface.name].data.transform(snapSurface.matrix_world.inverted())
+        return sourceSurface_BVHT
 
     def get_origin_and_direction(self, event, context):
         region    = context.region
@@ -449,7 +442,7 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         
     def get_mouse_3d_on_mesh(self, event, context):
         origin, direction = self.get_origin_and_direction(event, context)
-        self.hit, self.normal, *_ = self.bvhtree.ray_cast(origin, direction)
+        self.hit, self.normal, *_ = self.bvhtree.ray_cast(origin, direction, 100)
         if self.hit is not None:
             self.hit = self.hit + (self.normal * self.offset * random.random())
         self.hit_length = (origin - self.hit).length

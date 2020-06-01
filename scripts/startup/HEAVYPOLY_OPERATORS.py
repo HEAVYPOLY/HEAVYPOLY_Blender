@@ -292,11 +292,12 @@ class HP_OT_SmartScale(Operator):
         if modal:
             context.window_manager.modal_handler_add(self)
         print('Scaling')
-        bpy.ops.transform.resize('INVOKE_DEFAULT')
+        bpy.ops.transform.resize('INVOKE_DEFAULT', mirror=True)
         return {'RUNNING_MODAL'}
     def modal(self, context, event):
  #       if event.type == 'MOUSEMOVE':
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        
         print('Applying Scale')
         return {'FINISHED'}
         if event.type in {'RIGHTMOUSE', 'ESC'}:

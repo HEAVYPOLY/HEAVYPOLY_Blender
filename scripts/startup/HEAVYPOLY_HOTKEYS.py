@@ -80,10 +80,6 @@ def Keymap_Heavypoly():
 # Map Node Editor
     km = kc.keymaps.new('Node Editor', space_type='NODE_EDITOR', region_type='WINDOW', modal=False)
     kmi = km.keymap_items.new('node.view_selected', k_viewfit, 'PRESS', ctrl=True, shift=True)
-    kmi = km.keymap_items.new('node.select_box', 'EVT_TWEAK_L', 'ANY')
-    kmi_props_setattr(kmi.properties, 'extend', True)
-    kmi_props_setattr(kmi.properties, 'tweak', True)
-    kmi_props_setattr(kmi.properties, 'wait_for_input',False)
 # Map View2D
     km = kc.keymaps.new('View2D', space_type='EMPTY', region_type='WINDOW', modal=False)
     
@@ -121,24 +117,13 @@ def Keymap_Heavypoly():
     Global_Keys()
     kmi = km.keymap_items.new('image.view_selected', k_viewfit, 'PRESS', ctrl=True, shift=True)
     kmi = km.keymap_items.new("wm.call_menu_pie", k_menu,"PRESS",ctrl=True, alt=True).properties.name="HP_MT_pie_rotate90"
-    kmi = km.keymap_items.new('uv.select_lasso', 'EVT_TWEAK_L', 'ANY', shift=True, ctrl=True)
-    kmi_props_setattr(kmi.properties, 'extend', True)
-    kmi_props_setattr(kmi.properties, 'wait_for_input',False)
-    kmi = km.keymap_items.new('uv.select_lasso', 'EVT_TWEAK_L', 'ANY', ctrl=True)
-    kmi_props_setattr(kmi.properties, 'deselect', True)
-    kmi_props_setattr(kmi.properties, 'wait_for_input',False)
-    kmi = km.keymap_items.new('uv.select_border', 'EVT_TWEAK_L', 'ANY', shift=True)
-    kmi_props_setattr(kmi.properties, 'extend', True)
-    kmi_props_setattr(kmi.properties, 'wait_for_input',False)
-    kmi = km.keymap_items.new('uv.select_border', 'EVT_TWEAK_L', 'ANY')
-    kmi_props_setattr(kmi.properties, 'extend', False)
-    kmi_props_setattr(kmi.properties, 'wait_for_input',False)
 # Map Mask Editing
 #    km = kc.keymaps.new('Mask Editing', space_type='EMPTY', region_type='WINDOW', modal=False)
 #3D View
     km = kc.keymaps.new('3D View', space_type='VIEW_3D', region_type='WINDOW', modal=False)
     Global_Keys()
     kmi = km.keymap_items.new("view3d.smart_scale","S","PRESS")
+    kmi = km.keymap_items.new("view3d.hp_draw","D","PRESS", ctrl=True)
 #    kmi = km.keymap_items.new('view3d.render_border', 'B', 'PRESS', shift=True)
 #    kmi = km.keymap_items.new('view3d.clear_render_border', 'B', 'PRESS', shift=True, ctrl=True)
     kmi = km.keymap_items.new('mesh.hp_extrude', 'SPACE', 'PRESS', shift=True)
@@ -241,7 +226,7 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new('paint.sample_color', 'S', 'PRESS')
 #Object Mode
     km = kc.keymaps.new(name='Object Mode')
-    Global_Keys()    
+    Global_Keys()
     # kmi = km.keymap_items.new('view3d.smart_bevel','B', 'PRESS')
     #kmi = km.keymap_items.new('object.select_all', k_select, 'CLICK_DRAG')
     #kmi_props_setattr(kmi.properties, 'action', 'DESELECT')

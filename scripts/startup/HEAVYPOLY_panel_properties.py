@@ -2,7 +2,6 @@ import bpy
 import random
 from bpy.props import *
 from bpy_extras.node_utils import find_node_input
-from properties_data_modifier properties_data_modifier
 
 #class HP_PT_transforms(bpy.types.Panel):
 #    bl_label = "HEAVYPOLY TRANSFORM"
@@ -412,7 +411,6 @@ class HP_PT_object_properties(bpy.types.Panel):
             col2.prop(curve, "render_resolution_v", text="Render V")
             col2.prop(curve, "twist_mode")
             col2.prop(curve, "twist_smooth", text="Smooth")
-            col2.prop(curve, "use_fast_edit", text="Fast Editing")
 
             col2.prop(curve, "use_fill_deform")
             col2.prop(curve, "use_radius")

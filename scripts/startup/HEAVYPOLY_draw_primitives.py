@@ -291,7 +291,7 @@ class HP_OT_draw_primitives(bpy.types.Operator):
                     finish_box()
             if self.dragging:
                 self.delta = (-(event.mouse_y - self.first_mouse_y) + (self.first_mouse_x - event.mouse_x)) * self.hit_length
-                print('dragging')
+                # print('dragging')
                 if self.mode == 'Draw':
                     draw_vert(self.verts)                     
                 if self.mode == 'Thicken':
@@ -442,7 +442,9 @@ class HP_OT_draw_primitives(bpy.types.Operator):
         
     def get_mouse_3d_on_mesh(self, event, context):
         origin, direction = self.get_origin_and_direction(event, context)
-        self.hit, self.normal, *_ = self.bvhtree.ray_cast(origin, direction, 100)
+        self.hit, self.normal, *_ = self.bvhtree.ray_cast(origin, direction, 1000)
+        
+        # print('Ray Cast ', self.bvhtree.ray_cast(origin, direction, 1000))
         if self.hit is not None:
             self.hit = self.hit + (self.normal * self.offset * random.random())
         self.hit_length = (origin - self.hit).length

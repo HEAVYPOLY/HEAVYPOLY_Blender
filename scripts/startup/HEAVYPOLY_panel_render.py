@@ -65,7 +65,7 @@ class HP_PT_render(bpy.types.Panel):
                 if input:
                     col.separator()
                     col.separator()
-                    col.prop(scene.eevee, "use_volumetric", text="Use Volumetric")
+                    # col.prop(scene.eevee, "use_volumetric", text="Use Volumetric")
                     col.template_node_view(ntree, node, inputvol)
                 else:
                     col.label(text="Incompatible output node")

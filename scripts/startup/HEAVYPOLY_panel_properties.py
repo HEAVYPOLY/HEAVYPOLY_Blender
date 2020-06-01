@@ -157,11 +157,11 @@ class HP_PT_object_properties(bpy.types.Panel):
             col.prop(actdat, "energy")
             col2.label(text='Shadows')
             col2.prop(actdat, "shadow_buffer_clip_start", text="Clip Start")
-            col2.prop(actdat, "shadow_buffer_clip_end", text="End")
-            col2.prop(actdat, "shadow_buffer_soft", text="Fake Softness")
+            # col2.prop(actdat, "shadow_buffer_clip_end", text="End")
+            # col2.prop(actdat, "shadow_buffer_soft", text="Fake Softness")
             col2.prop(actdat, "shadow_buffer_bias", text="Contact Clip")
-            col2.prop(actdat, "shadow_buffer_exp", text="Darkness")
-            col2.prop(actdat, "shadow_buffer_bleed_bias", text="Bleed Bias")
+            # col2.prop(actdat, "shadow_buffer_exp", text="Darkness")
+            # col2.prop(actdat, "shadow_buffer_bleed_bias", text="Bleed Bias")
             col2.prop(actdat, "cutoff_distance", text="Distance")
             scene = context.scene
             props = scene.eevee

@@ -156,8 +156,8 @@ class HP_MT_popup_properties(bpy.types.Operator):
             scene = context.scene
             rd = scene.render
             row = col2.row(align = True)
-            row.prop(actdat, "clip_start", text="Clip Start")
-            row.prop(actdat, "clip_end", text="Clip End")
+            # row.prop(actdat, "clip_start", text="Clip Start")
+            # row.prop(actdat, "clip_end", text="Clip End")
 
             col2.prop(bpy.context.scene.render, "engine",text='')
             col2.prop(bpy.context.scene.view_settings, 'view_transform', text='')
@@ -195,11 +195,7 @@ class HP_MT_popup_properties(bpy.types.Operator):
                 col.prop(actdat, "show_cone")
             col.label(text='Shadows')
             col.prop(actdat, "shadow_buffer_clip_start", text="Clip Start")
-            col.prop(actdat, "shadow_buffer_clip_end", text="End")
-            col.prop(actdat, "shadow_buffer_soft", text="Fake Softness")
-            col.prop(actdat, "shadow_buffer_bias", text="Contact Clip")
-            col.prop(actdat, "shadow_buffer_exp", text="Darkness")
-            col.prop(actdat, "shadow_buffer_bleed_bias", text="Bleed Bias")
+            col.prop(actdat, "shadow_buffer_bias", text="Bias")
             col.prop(actdat, "cutoff_distance", text="Distance")
 
             # col.prop(actdat, "use_contact_shadow", text="Use Contact Shadows")
@@ -213,7 +209,7 @@ class HP_MT_popup_properties(bpy.types.Operator):
             col2.label(text='GLOBAL LIGHT PROPERTIES')
             row=col2.row()
             row.scale_x=.2
-            row.prop(props, "shadow_method", text='')
+            # row.prop(props, "shadow_method", text='')
             row.prop(props, "shadow_cube_size", text="")
             row.prop(props, "shadow_cascade_size", text="")
             col2.prop(props, "use_shadow_high_bitdepth")

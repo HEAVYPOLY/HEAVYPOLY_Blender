@@ -61,6 +61,9 @@ class HP_OT_draw_primitives(bpy.types.Operator):
     bl_label = "Draw Primitives"
     
     def invoke(self, context, event):
+        if not bpy.context.object.type == 'MESH':
+            self.report({'INFO'}, 'Selected Object is not a mesh')
+            return {'FINISHED'}
         args = (self, context)
         self._handle = bpy.types.SpaceView3D.draw_handler_add(draw_callback_px, args, 'WINDOW', 'POST_PIXEL')
         self.verts = []

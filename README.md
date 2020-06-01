@@ -1,2 +1,0 @@
-# HEAVYPOLY
-Blender Tools

@@ -92,7 +92,7 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new('action.select_box', 'EVT_TWEAK_L', 'ANY', ctrl=True)
     kmi_props_setattr(kmi.properties, 'mode', 'SUB')
     kmi = km.keymap_items.new('action.select_box', 'EVT_TWEAK_L', 'ANY')
-    kmi_props_setattr(kmi.properties, 'mode', 'NEW')
+    kmi_props_setattr(kmi.properties, 'mode', 'SET')
 # Map DOPESHEET_EDITOR
     km = kc.keymaps.new('Dopesheet Editor', space_type='DOPESHEET_EDITOR', region_type='WINDOW', modal=False)
     Global_Keys()
@@ -111,7 +111,7 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new('graph.select_box', 'EVT_TWEAK_L', 'ANY', ctrl=True)
     kmi_props_setattr(kmi.properties, 'mode', 'SUB')
     kmi = km.keymap_items.new('graph.select_box', 'EVT_TWEAK_L', 'ANY')
-    kmi_props_setattr(kmi.properties, 'mode', 'NEW')
+    kmi_props_setattr(kmi.properties, 'mode', 'SET')
 # Map UV Editor
     km = kc.keymaps.new('UV Editor', space_type='EMPTY', region_type='WINDOW', modal=False)
     Global_Keys()

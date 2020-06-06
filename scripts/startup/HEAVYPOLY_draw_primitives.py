@@ -48,18 +48,18 @@ def draw_callback_px(self, context):
     blf.size(font_id, 20, 72)
     blf.position(font_id, 30, y_offset + 60, 0)
     blf.draw(font_id, 'DRAG  | Draw')
-class VIEW3D_PT_hp_draw(bpy.types.Panel):
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = "HP Draw"
-    bl_label = "HP Draw"
+# class VIEW3D_PT_hp_draw(bpy.types.Panel):
+    # bl_space_type = 'VIEW_3D'
+    # bl_region_type = 'UI'
+    # bl_category = "HP Draw"
+    # bl_label = "HP Draw"
              
 
 class HP_OT_draw_primitives(bpy.types.Operator):
     """Draw a line with the mouse"""
     bl_idname = "view3d.hp_draw"
     bl_label = "Draw Primitives"
-    
+    bl_space_type = "VIEW_3D"
     def invoke(self, context, event):
         if not bpy.context.object.type == 'MESH':
             self.report({'INFO'}, 'Selected Object is not a mesh')
@@ -459,11 +459,11 @@ class HP_OT_draw_primitives(bpy.types.Operator):
              
 def register():
     bpy.utils.register_class(HP_OT_draw_primitives)
-    bpy.utils.register_class(VIEW3D_PT_hp_draw)
+    # bpy.utils.register_class(VIEW3D_PT_hp_draw)
 
 def unregister():
     bpy.utils.unregister_class(HP_OT_draw_primitives)
-    bpy.utils.unregister_class(VIEW3D_PT_hp_draw)
+    # bpy.utils.unregister_class(VIEW3D_PT_hp_draw)
 
 
 if __name__ == "__main__":

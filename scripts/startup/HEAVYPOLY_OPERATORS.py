@@ -225,7 +225,7 @@ class HP_OT_extrude(Operator):
         # Save Selection
         print('Initial Selection Saved')
         bpy.ops.object.face_map_add()
-        bpy.ops.object.face_map_add()
+        # bpy.ops.object.face_map_add()
         bpy.ops.object.face_map_assign()
 
         bpy.ops.mesh.select_linked(delimit={'SEAM'})
@@ -239,7 +239,7 @@ class HP_OT_extrude(Operator):
         bpy.ops.mesh.select_all(action='DESELECT')
         bpy.ops.object.face_map_select()
         bpy.ops.object.face_map_remove()
-        bpy.ops.object.face_map_remove()
+        # bpy.ops.object.face_map_remove()
 
         print('EXTRUDING FACES')
         bpy.ops.mesh.extrude_region_move('EXEC_DEFAULT')

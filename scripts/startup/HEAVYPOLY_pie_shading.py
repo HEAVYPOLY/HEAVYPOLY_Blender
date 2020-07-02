@@ -81,7 +81,7 @@ class HP_MT_pie_shading(Menu):
         box.prop(overlay, "show_overlays", text="OVERLAYS")
         box.prop(overlay, "show_extras", text="EXTRAS")
         box.prop(context.scene.eevee, "use_soft_shadows", text="SOFT SHADOWS")
-        box.prop(overlay, "show_backface_culling", text="HIDE BACKFACES")
+        # box.prop(overlay, "show_backface_culling", text="HIDE BACKFACES")
         box.prop(overlay, "show_cursor", text="3D CURSOR")
         box.operator("view3d.smart_shade_smooth_toggle", text = 'Shade Smooth')
 #        pie.operator("view3d.toggle_background_hide", text="Toggle BG Hide")

@@ -1,0 +1,6 @@
+﻿scripts/startup/__pycache__
+scripts/startup/bl_app_templates_system
+scripts/startup/bl_operators
+scripts/startup/bl_ui
+scripts/startup/keyingsets_builtins.py
+scripts/startup/nodeitems_builtins.py

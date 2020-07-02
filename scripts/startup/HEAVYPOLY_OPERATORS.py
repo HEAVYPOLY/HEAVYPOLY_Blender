@@ -123,6 +123,8 @@ class HP_OT_smart_snap_origin(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
     def invoke(self, context, event):
         print('smartsnaporigin')
+        cursor_start_location = bpy.context.scene.cursor.location * 1
+        # print(cursor_start_location)
         try:
             if context.active_object.mode == 'EDIT':
                 if context.active_object.type == 'MESH':
@@ -149,6 +151,8 @@ class HP_OT_smart_snap_origin(bpy.types.Operator):
                 #bpy.ops.object.origin_set(type = 'ORIGIN_CURSOR')
                 bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
             #bpy.context.scene.tool_settings.transform_pivot_point = 'MEDIAN_POINT'
+            print(cursor_start_location)
+            bpy.context.scene.cursor.location = (cursor_start_location[0],cursor_start_location[1],cursor_start_location[2])
         except:
             return {'FINISHED'}
         return {'FINISHED'}
@@ -353,13 +357,13 @@ class HP_OT_SeparateAndSelect(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
     def execute(self, context):
 
-        base = bpy.context.active_object
+        bases = bpy.context.selected_objects
         bpy.ops.mesh.separate(type='SELECTED')
         bpy.ops.object.editmode_toggle()
-        base.select_set(state=False)
+        for b in bases:
+            b.select_set(state=False)
         selected = bpy.context.selected_objects
-        for sel in selected:
-            bpy.context.view_layer.objects.active = sel
+        bpy.context.view_layer.objects.active = selected[-1]
         bpy.ops.object.editmode_toggle()
         bpy.ops.mesh.select_all(action='SELECT')
         return {'FINISHED'}

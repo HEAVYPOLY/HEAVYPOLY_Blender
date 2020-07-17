@@ -216,7 +216,7 @@ class HP_OT_boolean_live(bpy.types.Operator):
                 cutter.name = str(base.name + "_Cutter_" + str(len(view_layer_cutters)))
                 for cut in cutter.modifiers:
                     if "_Cutter" in cut.name:
-                       bpy.ops.object.modifier_apply(apply_as='DATA', modifier=cut.name)
+                       bpy.ops.object.modifier_apply(modifier=cut.name)
                 if self.cutline == 'YES':
                     cutter.modifiers.new('Cutline', "SOLIDIFY")
                     bpy.context.object.modifiers['Cutline'].thickness = 0.02
@@ -230,7 +230,7 @@ class HP_OT_boolean_live(bpy.types.Operator):
                     cutter.select_set(state=True)
                     cutter.name = str(base.name + "_Inset_Cutter")
                     for x in view_layer_cutters:
-                        bpy.ops.object.modifier_apply(apply_as='DATA', modifier = x.name)
+                        bpy.ops.object.modifier_apply(modifier = x.name)
                     bpy.ops.object.duplicate()
                     bpy.context.view_layer.objects.active.name = str(base.name + "_Inset")
                     inset = bpy.context.active_object
@@ -283,7 +283,7 @@ class HP_OT_boolean_live(bpy.types.Operator):
                 if self.live == 'NO':
                     if context.active_object.mode != 'OBJECT':
                         bpy.ops.object.editmode_toggle()
-                    bpy.ops.object.modifier_apply(apply_as='DATA', modifier=cutter.name)
+                    bpy.ops.object.modifier_apply(modifier=cutter.name)
                     base.select_set(state=False)
                     cutter.select_set(state=True)
                     bpy.ops.object.delete(use_global=False)
@@ -389,7 +389,7 @@ class HP_OT_boolean_apply(bpy.types.Operator):
                     for base in view_layer.objects:
                         for mod in base.modifiers:
                             bpy.context.view_layer.objects.active = base
-                            bpy.ops.object.modifier_apply(apply_as='DATA', modifier=cutter.name)
+                            bpy.ops.object.modifier_apply(modifier=cutter.name)
                     cutter.select_set(state=True)
                 else:
                     base = ob
@@ -400,10 +400,10 @@ class HP_OT_boolean_apply(bpy.types.Operator):
 
                     for mod in base.modifiers:
                         if self.all == 'YES':
-                            bpy.ops.object.modifier_apply(apply_as='DATA', modifier=mod.name)
+                            bpy.ops.object.modifier_apply(modifier=mod.name)
                         try:
                             cutter = bpy.context.view_layer.objects[mod.name]
-                            bpy.ops.object.modifier_apply(apply_as='DATA', modifier=cutter.name)
+                            bpy.ops.object.modifier_apply(modifier=cutter.name)
                             if self.dup == 'YES':
                                 # cutter.hide_render = True
                                 continue

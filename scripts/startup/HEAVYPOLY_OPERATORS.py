@@ -328,7 +328,7 @@ class HP_OT_SmartBevel(bpy.types.Operator):
                 # bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
             else:
                 if tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (True, False, False):
-                    bpy.ops.mesh.bevel('INVOKE_DEFAULT',clamp_overlap=True, vertex_only=True)
+                    bpy.ops.mesh.bevel('INVOKE_DEFAULT',clamp_overlap=True)
                     return {'FINISHED'}
                 elif tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (False, False, True):
                     bpy.ops.mesh.select_mode(type = 'EDGE')
@@ -343,7 +343,7 @@ class HP_OT_SmartBevel(bpy.types.Operator):
                             sel.append(v)
                     if len(sel) == 0:
                         bpy.ops.mesh.select_all(action='SELECT')
-                bpy.ops.mesh.bevel('INVOKE_DEFAULT',vertex_only=False, clamp_overlap=True, miter_outer='ARC')
+                bpy.ops.mesh.bevel('INVOKE_DEFAULT', clamp_overlap=True, miter_outer='ARC')
             bpy.ops.mesh.remove_doubles()
 
         return {'FINISHED'}

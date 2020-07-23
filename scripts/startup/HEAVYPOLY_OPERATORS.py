@@ -328,7 +328,7 @@ class HP_OT_SmartBevel(bpy.types.Operator):
                 # bpy.ops.view3d.hp_draw('INVOKE_DEFAULT')
             else:
                 if tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (True, False, False):
-                    bpy.ops.mesh.bevel('INVOKE_DEFAULT',clamp_overlap=True)
+                    bpy.ops.mesh.bevel('INVOKE_DEFAULT',clamp_overlap=True,affect='VERTICES')
                     return {'FINISHED'}
                 elif tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (False, False, True):
                     bpy.ops.mesh.select_mode(type = 'EDGE')

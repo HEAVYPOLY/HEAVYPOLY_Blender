@@ -76,7 +76,7 @@ class HP_OT_symmetrize_select_all(bpy.types.Operator):
             # if event.ctrl:
                 # print('ctrl is held')
                 # bpy.ops.mesh.select_linked(delimit={'SEAM'})
-                # bpy.ops.mesh.separate_and_select()
+                # bpy.ops.object.separate_and_select()
                 # bpy.ops.mesh.select_all(action='DESELECT')
                 # bpy.ops.object.vertex_group_select()
                 # bpy.ops.view3d.snap_cursor_to_selected()

@@ -42,7 +42,7 @@ class jmPipeTool(bpy.types.Operator):
             self.first_mouse_x = event.mouse_x
             if context.object.type == 'MESH':
                 bpy.ops.mesh.duplicate_move()
-                bpy.ops.mesh.separate_and_select()
+                bpy.ops.object.separate_and_select()
                 bpy.ops.object.editmode_toggle()
                 # for mod in context.object.modifiers:
                     # bpy.ops.object.modifier_apply(apply_as='DATA')

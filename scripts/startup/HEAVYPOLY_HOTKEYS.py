@@ -200,7 +200,7 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new("mesh.inset", "SPACE", "PRESS", alt=True)
     kmi = km.keymap_items.new("mesh.push_and_slide","G","PRESS", shift=True)
 #    kmi_props_setattr(kmi.properties, 'use_even_offset', True)
-    kmi = km.keymap_items.new('mesh.separate_and_select', 'P', 'PRESS')
+    kmi = km.keymap_items.new('object.separate_and_select', 'P', 'PRESS')
     kmi = km.keymap_items.new('mesh.bridge_edge_loops', 'B', 'PRESS', shift=True)
     kmi = km.keymap_items.new('mesh.bridge_edge_loops', 'B', 'PRESS', ctrl=True, shift=True).properties.number_cuts = 12
     kmi = km.keymap_items.new('transform.edge_bevelweight','B', 'PRESS', alt=True).properties.value = 1

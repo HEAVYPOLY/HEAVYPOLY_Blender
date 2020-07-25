@@ -91,13 +91,13 @@ class HP_MT_pie_select(Menu):
         col.separator()
         col.separator()
         col.separator()
-        if bpy.context.object.type == "GPENCIL":
-            col.prop('bpy.context.tool_settings.gpencil_sculpt', 'lock_axis', text = 'Draw Axis', icon='NONE')
-            col.operator('view3d.gp_canvas', text = 'Front', icon='NONE').type = 'Y'
-            col.operator('view3d.gp_canvas', text = 'Top', icon='NONE').type = 'Z'
+        # if bpy.context.object.type == "GPENCIL":
+            # col.prop('bpy.context.tool_settings.gpencil_sculpt', 'lock_axis', text = 'Draw Axis', icon='NONE')
+            # col.operator('view3d.gp_canvas', text = 'Front', icon='NONE').type = 'Y'
+            # col.operator('view3d.gp_canvas', text = 'Top', icon='NONE').type = 'Z'
         col.separator()
         col.separator()
-        col.operator('mesh.separate_and_select', text = 'Split To New Object')
+        col.operator('object.separate_and_select', text = 'Split To New Object')
 
         col.operator('object.join', text = 'Join Objects')
         prop = col.operator('object.parent_set', text = 'Set Parent')

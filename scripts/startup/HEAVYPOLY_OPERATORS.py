@@ -352,20 +352,37 @@ class HP_OT_SmartBevel(bpy.types.Operator):
 
 
 class HP_OT_SeparateAndSelect(bpy.types.Operator):
-    bl_idname = "mesh.separate_and_select"        # unique identifier for buttons and menu items to reference.
+    bl_idname = "object.separate_and_select"        # unique identifier for buttons and menu items to reference.
     bl_label = "Separate and Select"         # display name in the interface.
     bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
     def execute(self, context):
 
         bases = bpy.context.selected_objects
-        bpy.ops.mesh.separate(type='SELECTED')
-        bpy.ops.object.editmode_toggle()
+        if bpy.context.object.type == 'MESH':
+            bpy.ops.mesh.separate(type='SELECTED')
+        elif bpy.context.object.type == 'GPENCIL':
+            bpy.ops.gpencil.stroke_separate(mode='POINT')
+
+            # bpy.ops.gpencil.stroke_split()
+        elif bpy.context.object.type == 'CURVE':
+            bpy.ops.curve.separate()
+        if bpy.context.object.type == 'GPENCIL':
+            bpy.ops.gpencil.editmode_toggle()
+        else:
+            bpy.ops.object.editmode_toggle()
+            
         for b in bases:
             b.select_set(state=False)
         selected = bpy.context.selected_objects
         bpy.context.view_layer.objects.active = selected[-1]
-        bpy.ops.object.editmode_toggle()
-        bpy.ops.mesh.select_all(action='SELECT')
+        if bpy.context.object.type == 'GPENCIL':
+            bpy.ops.gpencil.editmode_toggle()
+        else:
+            bpy.ops.object.editmode_toggle()
+        if bpy.context.object.type == 'MESH':
+            bpy.ops.mesh.select_all(action='SELECT')
+        if bpy.context.object.type == 'CURVE':
+            bpy.ops.curve.select_all(action='SELECT')
         return {'FINISHED'}
 
 class HP_OT_SmartShadeSmooth(bpy.types.Operator):

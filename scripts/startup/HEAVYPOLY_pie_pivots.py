@@ -25,9 +25,10 @@ class HP_MT_pie_pivots(Menu):
 
         # 4 - LEFT
         prop = pie.operator("wm.context_toggle_enum", text="Direction", icon='OBJECT_DATA')
-        prop.data_path = "scene.type"
+        prop.data_path = "scene.transform_orientation_slots[0].type"
         prop.value_1 = "NORMAL"
         prop.value_2 = "GLOBAL"
+
 
         # 6 - RIGHT
         pie.split()
@@ -62,8 +63,11 @@ class HP_MT_pie_pivots(Menu):
 
         # 3 - BOTTOM - RIGHT
 
+
 classes = (
     HP_MT_pie_pivots,
+
+
 )
 register, unregister = bpy.utils.register_classes_factory(classes)
 

@@ -66,7 +66,7 @@ class HP_OT_subdivide_cylinder(bpy.types.Operator):
     def execute(self, context):
         bpy.ops.mesh.loop_multi_select(ring=False)
         bpy.ops.mesh.loop_multi_select(ring=True)
-        bpy.ops.mesh.bevel(offset_type='PERCENT', offset_pct=25, vertex_only=False)
+        bpy.ops.mesh.bevel(offset_type='PERCENT', offset_pct=25, affect='EDGES')
         return {'FINISHED'}
 
 

@@ -23,7 +23,7 @@ class HP_MT_pie_save(Menu):
 		layout = self.layout
 		pie = layout.menu_pie()
 		pie.operator("wm.link", text = "Link/Reference", icon='LINK_BLEND')
-		pie.operator("wm.save_without_prompt", text="Save", icon='FILE_TICK')
+		pie.operator("wm.save_mainfile", text="Save", icon='FILE_TICK')
 		pie.operator("wm.save_as_mainfile", text="Save As...", icon='NONE')
 		pie.operator("wm.open_mainfile", text="Open file", icon='FILE_FOLDER')
 		pie.operator("wm.read_homefile", text="New", icon='FILE_NEW')

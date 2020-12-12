@@ -246,8 +246,9 @@ def Keymap_Heavypoly():
 
 # Outliner
     km = kc.keymaps.new('Outliner', space_type='OUTLINER', region_type='WINDOW', modal=False)
-    Global_Keys()
     kmi = km.keymap_items.new('outliner.show_active', k_nav, 'PRESS', ctrl=True, shift=True)
+    Global_Keys()
+
     kmi = km.keymap_items.new('wm.delete_without_prompt', 'X', 'PRESS')
 
 

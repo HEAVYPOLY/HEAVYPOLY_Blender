@@ -247,12 +247,13 @@ class HP_OT_boolean_live(bpy.types.Operator):
                     bpy.context.view_layer.objects.active = inset
                 cutter.display_type = self.displaytype
                 cutter.show_bounds = self.showbounds
-                cutter.cycles_visibility.camera = False
-                cutter.cycles_visibility.transmission = False
-                cutter.cycles_visibility.diffuse = False
-                cutter.cycles_visibility.scatter = False
-                cutter.cycles_visibility.glossy = False
-                cutter.cycles_visibility.shadow = False
+                cutter.hide_render = True
+                # cutter.cycles_visibility.camera = False
+                # cutter.cycles_visibility.transmission = False
+                # cutter.cycles_visibility.diffuse = False
+                # cutter.cycles_visibility.scatter = False
+                # cutter.cycles_visibility.glossy = False
+                # cutter.cycles_visibility.shadow = False
                 cutter.select_set(state=False)
 
         def create_bool(bool_operation, live):
@@ -290,7 +291,7 @@ class HP_OT_boolean_live(bpy.types.Operator):
                     base.select_set(state=True)
                     i = base.data.vertex_colors.active_index
                     base.data.vertex_colors.active_index = i + 1
-                    bpy.ops.mesh.vertex_color_remove()
+                    # bpy.ops.mesh.vertex_color_remove()
 
         if context.active_object.mode != 'OBJECT':
             isedit = True

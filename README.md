@@ -6,4 +6,6 @@ Always updated to work current daily Blender Build (2.90+)
 
 Install Instructions:
 
+Click the Green button at top right, then download zip.
+
 https://www.youtube.com/watch?v=TRESMUenxa8

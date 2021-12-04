@@ -2,7 +2,7 @@
 
 Scripts and Pie Menus designed to make Blender more streamlined.  Designed for use with pen tablet or mouse.  Also friendly for righty and lefty.
 
-Always updated to work current daily Blender Build (2.90+)
+Always updated to work current daily Blender Build (3.0+)
 
 Install Instructions:
 

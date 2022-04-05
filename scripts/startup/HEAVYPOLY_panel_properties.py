@@ -422,7 +422,7 @@ class HP_PT_object_properties(bpy.types.Panel):
             col2.prop(curve, "bevel_factor_mapping_end", text="End")
 
            
-        elif len(bpy.context.selected_objects) == 0 or self.type == 'WORLD':
+        elif len(bpy.context.selected_objects) == 0:
             col.label(text='WORLD PROPERTIES')
             if bpy.context.scene.camera:
                 cam_props(bpy.context.scene.camera)

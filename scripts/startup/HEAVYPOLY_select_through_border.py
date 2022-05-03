@@ -10,7 +10,7 @@ bl_info = {
 	"wiki_url": "",
 	"category": "Pie Menu"
 	}
-	
+
 import bpy
 import bgl
 from mathutils import Vector
@@ -39,7 +39,7 @@ class HP_OT_select_through_border(bpy.types.Operator):
 			context.window_manager.modal_handler_add(self)
 		return {'RUNNING_MODAL'}
    # [("view3d.select_box",
-     # {"type": 'EVT_TWEAK_L', "value": 'ANY'},
+     # {"type": 'LEFTMOUSE', "value": 'ANY'},
      # {"properties":
       # [("wait_for_input", True),
        # ],
@@ -48,7 +48,7 @@ class HP_OT_select_through_border_add(bpy.types.Operator):
 	bl_label = "Select Through Border"
 
 	def modal(self, context, event):
-		
+
 		bpy.context.space_data.shading.show_xray = True
 		if event.type == 'MOUSEMOVE' and event.value == 'PRESS':
 			bpy.ops.view3d.select_box('INVOKE_DEFAULT',mode='ADD',wait_for_input=False)

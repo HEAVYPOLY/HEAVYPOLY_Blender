@@ -129,7 +129,6 @@ class HP_MT_pie_select(Menu):
             case "GPENCIL":
                 col.operator('object.mode_set', text = 'Vertex Paint', icon='VPAINT_HLT').mode='VERTEX_GPENCIL'
                 col.operator('object.mode_set', text = 'Weight Paint', icon='WPAINT_HLT').mode='WEIGHT_GPENCIL'
-                col.operator('object.mode_set', text = 'Texture Paint', icon='BRUSH_DATA').mode='PAINT_GPENCIL'
             case "LATTICE":
                 col.operator('object.mode_set', text = 'Weight Paint', icon='WPAINT_HLT').mode='WEIGHT_PAINT'
             case "ARMATURE":

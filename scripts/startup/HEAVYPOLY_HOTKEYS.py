@@ -87,11 +87,11 @@ def Keymap_Heavypoly():
     km = kc.keymaps.new('Animation', space_type='EMPTY', region_type='WINDOW', modal=False)
     kmi = km.keymap_items.new('anim.change_frame', k_nav, 'PRESS')
     kmi = km.keymap_items.new('anim.change_frame', k_select, 'PRESS', alt = True)
-    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'ANY', shift=True)
+    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'CLICK_DRAG', shift=True)
     kmi_props_setattr(kmi.properties, 'mode', 'ADD')
-    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'ANY', ctrl=True)
+    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'CLICK_DRAG', ctrl=True)
     kmi_props_setattr(kmi.properties, 'mode', 'SUB')
-    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'ANY')
+    kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'CLICK_DRAG')
     kmi_props_setattr(kmi.properties, 'mode', 'SET')
 # Map DOPESHEET_EDITOR
     km = kc.keymaps.new('Dopesheet Editor', space_type='DOPESHEET_EDITOR', region_type='WINDOW', modal=False)
@@ -106,11 +106,11 @@ def Keymap_Heavypoly():
     Global_Keys()
     kmi = km.keymap_items.new('graph.view_selected', k_viewfit, 'PRESS', ctrl=True, shift=True)
     kmi = km.keymap_items.new('graph.cursor_set', k_select, 'PRESS', alt = True)
-    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'ANY', shift=True)
+    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'CLICK_DRAG', shift=True)
     kmi_props_setattr(kmi.properties, 'mode', 'ADD')
-    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'ANY', ctrl=True)
+    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'CLICK_DRAG', ctrl=True)
     kmi_props_setattr(kmi.properties, 'mode', 'SUB')
-    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'ANY')
+    kmi = km.keymap_items.new('graph.select_box', 'LEFTMOUSE', 'CLICK_DRAG')
     kmi_props_setattr(kmi.properties, 'mode', 'SET')
 # Map UV Editor
     km = kc.keymaps.new('UV Editor', space_type='EMPTY', region_type='WINDOW', modal=False)
@@ -148,10 +148,10 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new("screen.repeat_last","WHEELINMOUSE","PRESS",ctrl=True, shift=True, alt=True)
     kmi = km.keymap_items.new("ed.undo","WHEELOUTMOUSE","PRESS",ctrl=True, shift=True, alt=True)
     kmi = km.keymap_items.new("view3d.screencast_keys","U","PRESS",alt=True)
-    kmi = km.keymap_items.new('view3d.select_lasso', 'LEFTMOUSE', 'ANY', shift=True, ctrl=True)
-    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'ANY',ctrl=True).properties.mode='SUB'
-    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'ANY',shift=True).properties.mode='ADD'
-    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'ANY').properties.mode='SET'
+    kmi = km.keymap_items.new('view3d.select_lasso', 'LEFTMOUSE', 'CLICK_DRAG', shift=True, ctrl=True)
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG',ctrl=True).properties.mode='SUB'
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG',shift=True).properties.mode='ADD'
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG').properties.mode='SET'
     kmi = km.keymap_items.new("wm.search_menu","FIVE","PRESS")
     kmi = km.keymap_items.new("view3d.subdivision_toggle","TAB","PRESS")
     # kmi = km.keymap_items.new("view3d.smart_snap_cursor","RIGHTMOUSE","PRESS",ctrl=True)
@@ -166,10 +166,10 @@ def Keymap_Heavypoly():
     # kmi = km.keymap_items.new('view3d.clear_render_border', 'Z', 'PRESS', shift=True, ctrl=True)
     kmi = km.keymap_items.new("mesh.dupli_extrude_cursor", 'E', 'PRESS')
     kmi = km.keymap_items.new("transform.edge_bevelweight", 'E', 'PRESS', ctrl=True, shift=True)
-    #kmi = km.keymap_items.new('transform.translate', 'LEFTMOUSE','ANY')
-    kmi = km.keymap_items.new('view3d.select_through_border', 'LEFTMOUSE','ANY')
-    kmi = km.keymap_items.new('view3d.select_through_border_add', 'LEFTMOUSE', 'ANY',shift=True)
-    kmi = km.keymap_items.new('view3d.select_through_border_sub', 'LEFTMOUSE', 'ANY',ctrl=True)
+    #kmi = km.keymap_items.new('transform.translate', 'LEFTMOUSE', 'CLICK_DRAG')
+    kmi = km.keymap_items.new('view3d.select_through_border', 'LEFTMOUSE', 'CLICK_DRAG')
+    kmi = km.keymap_items.new('view3d.select_through_border_add', 'LEFTMOUSE', 'CLICK_DRAG',shift=True)
+    kmi = km.keymap_items.new('view3d.select_through_border_sub', 'LEFTMOUSE', 'CLICK_DRAG',ctrl=True)
     kmi = km.keymap_items.new("wm.call_menu_pie","A","PRESS", shift=True).properties.name="HP_MT_pie_add"
     kmi = km.keymap_items.new("wm.call_menu","W","PRESS").properties.name="VIEW3D_MT_edit_mesh_context_menu"
     kmi = km.keymap_items.new("screen.userpref_show","TAB","PRESS", ctrl=True)

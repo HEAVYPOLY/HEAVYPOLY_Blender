@@ -39,7 +39,7 @@ class HP_OT_select_through_border(bpy.types.Operator):
 			context.window_manager.modal_handler_add(self)
 		return {'RUNNING_MODAL'}
    # [("view3d.select_box",
-     # {"type": 'LEFTMOUSE', "value": 'ANY'},
+     # {"type": 'LEFTMOUSE', "value": 'CLICK_DRAG'},
      # {"properties":
       # [("wait_for_input", True),
        # ],

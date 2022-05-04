@@ -190,7 +190,7 @@ class HP_OT_SelectModeSmart(bpy.types.Operator):
                         bpy.ops.object.mode_set(mode='EDIT')
                         select(self.selectmode)
                     case "GPENCIL":
-                        bpy.ops.object.mode_set(mode='GPENCIL_PAINT')]
+                        bpy.ops.object.mode_set(mode='GPENCIL_PAINT')
                     case "CURVE" | "FONT":
                         bpy.ops.object.mode_set(mode='EDIT')
             case "EDIT_MESH":

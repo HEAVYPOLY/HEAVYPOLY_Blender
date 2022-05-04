@@ -22,20 +22,18 @@ class HP_MT_pie_select(Menu):
 
         pie = layout.menu_pie()
         # left
-        match bpy.context.mode:
-            case "OBJECT":
-                split = pie.split()
-                col = split.column()
-                col.scale_y=1.5
-                col.operator("object.select_grouped", text="Similar")
-                col.operator("view3d.selectsmartsimilar", text="Similar Name")
-            case _:
-                split = pie.split()
-                col = split.column()
-                col.scale_y=1.5
-                col.operator("mesh.select_similar", text="Similar")
-                col.operator("mesh.hp_select_border", text="Border")
-
+        if bpy.context.mode == 'OBJECT':
+            split = pie.split()
+            col = split.column()
+            col.scale_y=1.5
+            col.operator("object.select_grouped", text="Similar")
+            col.operator("view3d.selectsmartsimilar", text="Similar Name")
+        else:
+            split = pie.split()
+            col = split.column()
+            col.scale_y=1.5
+            col.operator("mesh.select_similar", text="Similar")
+            col.operator("mesh.hp_select_border", text="Border")
         # Right
         match bpy.context.mode:
             case "EDIT_MESH":
@@ -44,10 +42,8 @@ class HP_MT_pie_select(Menu):
                 pie.operator("object.voxel_remesh", text="Remesh", icon='NONE')
             case _:
                 pie.operator("object.select_grouped", text="Select Collection", icon='NONE').type='COLLECTION'
-
         # bottom
         pie.operator("object.mode_set", text="Object", icon='MESH_CUBE').mode='OBJECT'
-
         # top
         match bpy.context.object.type:
             case "GPENCIL":
@@ -60,7 +56,6 @@ class HP_MT_pie_select(Menu):
                 pie.operator('object.mode_set', text = 'Edit', icon='NONE').mode='EDIT'
             case _:
                 pie.operator("object.selectmodesmart", text="Edge", icon='NONE').selectmode='EDGE'
-
         # topleft
         match bpy.context.object.type:
             case "GPENCIL":
@@ -76,7 +71,6 @@ class HP_MT_pie_select(Menu):
                 split = pie.split()
             case _:
                 pie.operator("object.selectmodesmart", text="Vert", icon='NONE').selectmode='VERT'
-
         # topright
         match bpy.context.object.type:
             case "GPENCIL":
@@ -90,7 +84,6 @@ class HP_MT_pie_select(Menu):
                 split = pie.split()
             case _:
                 pie.operator("object.selectmodesmart", text="Face", icon='NONE').selectmode='FACE'
-
         # bottomleft
         split = pie.split()
         col = split.column()
@@ -108,13 +101,7 @@ class HP_MT_pie_select(Menu):
         prop.keep_transform=True
         col.operator('object.parent_clear', text = 'Remove Parent').type='CLEAR_KEEP_TRANSFORM'
 
-
-
-
-        # bottomright
-        # if bpy.context.mode == 'EDIT_MESH':
-            # pie.operator("mesh.faces_select_linked_flat", text="Select Flat").sharpness=0.436332
-
+        #bottomright
         split = pie.split()
         col = split.column()
         col.scale_y=1.5
@@ -124,6 +111,7 @@ class HP_MT_pie_select(Menu):
         col.separator()
         col.separator()
         col.separator()
+
         match bpy.context.object.type:
             case "MESH":
                 col.operator('object.mode_set', text = 'Sculpt', icon='SCULPTMODE_HLT').mode='SCULPT'
@@ -193,8 +181,9 @@ class HP_OT_SelectModeSmart(bpy.types.Operator):
                         bpy.ops.object.mode_set(mode='EDIT')
                         select(self.selectmode)
                     case "GPENCIL":
-                        bpy.ops.object.mode_set(mode='GPENCIL_PAINT')
-                    case in ('CURVE','FONT'):
+                        bpy.ops.object.mode_set(mode='GPENCIL_PAINT')]
+                    #no docs found on using in with a match case
+                    case "CURVE" | "FONT":
                         bpy.ops.object.mode_set(mode='EDIT')
             case "EDIT_MESH":
                 select(self.selectmode)
@@ -246,7 +235,6 @@ class HP_OT_select_border(bpy.types.Operator):
         bpy.ops.mesh.select_mode(type='EDGE')
         bpy.ops.mesh.region_to_loop()
         return {'FINISHED'}
-
 
 classes = (
     HP_MT_pie_select,

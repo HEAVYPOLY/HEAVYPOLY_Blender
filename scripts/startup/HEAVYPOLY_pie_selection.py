@@ -182,7 +182,6 @@ class HP_OT_SelectModeSmart(bpy.types.Operator):
                         select(self.selectmode)
                     case "GPENCIL":
                         bpy.ops.object.mode_set(mode='GPENCIL_PAINT')]
-                    #no docs found on using in with a match case
                     case "CURVE" | "FONT":
                         bpy.ops.object.mode_set(mode='EDIT')
             case "EDIT_MESH":

@@ -21,6 +21,7 @@ class HP_MT_pie_select(Menu):
         layout = self.layout
 
         pie = layout.menu_pie()
+
         # left
         if bpy.context.mode == 'OBJECT':
             split = pie.split()
@@ -34,6 +35,7 @@ class HP_MT_pie_select(Menu):
             col.scale_y=1.5
             col.operator("mesh.select_similar", text="Similar")
             col.operator("mesh.hp_select_border", text="Border")
+
         # Right
         match bpy.context.mode:
             case "EDIT_MESH":
@@ -42,9 +44,11 @@ class HP_MT_pie_select(Menu):
                 pie.operator("object.voxel_remesh", text="Remesh", icon='NONE')
             case _:
                 pie.operator("object.select_grouped", text="Select Collection", icon='NONE').type='COLLECTION'
+
         # bottom
         pie.operator("object.mode_set", text="Object", icon='MESH_CUBE').mode='OBJECT'
         # top
+
         match bpy.context.object.type:
             case "GPENCIL":
                 pie.operator('object.mode_set', text = 'GP Edit', icon='EDITMODE_HLT').mode='EDIT_GPENCIL'
@@ -56,6 +60,7 @@ class HP_MT_pie_select(Menu):
                 pie.operator('object.mode_set', text = 'Edit', icon='NONE').mode='EDIT'
             case _:
                 pie.operator("object.selectmodesmart", text="Edge", icon='NONE').selectmode='EDGE'
+
         # topleft
         match bpy.context.object.type:
             case "GPENCIL":
@@ -71,6 +76,7 @@ class HP_MT_pie_select(Menu):
                 split = pie.split()
             case _:
                 pie.operator("object.selectmodesmart", text="Vert", icon='NONE').selectmode='VERT'
+
         # topright
         match bpy.context.object.type:
             case "GPENCIL":
@@ -84,6 +90,7 @@ class HP_MT_pie_select(Menu):
                 split = pie.split()
             case _:
                 pie.operator("object.selectmodesmart", text="Face", icon='NONE').selectmode='FACE'
+
         # bottomleft
         split = pie.split()
         col = split.column()
@@ -129,9 +136,11 @@ class HP_MT_pie_select(Menu):
                 pass
             case "META":
                 pass
+
             # Particles Will be removed in later versions, keeping it on the bottom for organisation
             case bpy.context.object.particle_systems:
                 col.operator('object.mode_set', text = 'Particle Edit', icon='PARTICLEMODE').mode='PARTICLE_EDIT'
+
             # New datatypes can easily be added above pass
             case _:
                 pass
@@ -190,9 +199,6 @@ class HP_OT_SelectModeSmart(bpy.types.Operator):
                 bpy.context.mode = "OBJECT"
             case _:
                 bpy.ops.object.mode_set(mode="EDIT")
-
-        # except:
-            # self.report({'ERROR'}, "Select An Object First")
         return {'FINISHED'}
 
 class HP_OT_SelectSmartSimilar(bpy.types.Operator):

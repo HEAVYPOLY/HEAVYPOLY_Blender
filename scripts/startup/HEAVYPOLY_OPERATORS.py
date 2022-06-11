@@ -295,22 +295,21 @@ class HP_OT_SmartScale(Operator):
             pass
         if modal:
             context.window_manager.modal_handler_add(self)
-        print('Scaling')
+            print('Scaling MODAL')
         bpy.ops.transform.resize('INVOKE_DEFAULT', mirror=True)
         return {'RUNNING_MODAL'}
     def modal(self, context, event):
- #       if event.type == 'MOUSEMOVE':
-        # if event.type == 'LEFTMOUSE':
-        if event.type == 'MOUSEMOVE' and event.value == 'RELEASE':
+        print("MODAL " + event.type)
+        if event.type == 'MOUSEMOVE':
             bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-        
-            print('Applying Scale')
             return {'FINISHED'}
+        # if event.type == 'LEFTMOUSE' and event.value == 'PRESS':
+        #     print('Applying Scale')
+        #     return {'FINISHED'}
         elif event.type in {'RIGHTMOUSE', 'ESC'}:
             return {'CANCELLED'}
         else:
             return {'RUNNING_MODAL'}
-        #return {'FINISHED'}
 class HP_OT_SmartBevel(bpy.types.Operator):
     bl_idname = "view3d.smart_bevel"        # unique identifier for buttons and menu items to reference.
     bl_label = "Smart Bevel"         # display name in the interface.

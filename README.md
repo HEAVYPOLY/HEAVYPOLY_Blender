@@ -6,8 +6,9 @@ Scripts and Pie Menus designed to make Blender more streamlined.  Designed for u
 
 Install Instructions:
 
+1:  
 Blender 4.0 - Click the Green button at top right, then download zip
 
 Blender 3.x - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
-https://www.youtube.com/watch?v=TRESMUenxa8
+2.:  https://www.youtube.com/watch?v=TRESMUenxa8

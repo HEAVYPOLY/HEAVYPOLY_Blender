@@ -249,7 +249,20 @@ class HP_OT_extrude(Operator):
             print('FIXING NORMALS')
             return {'RUNNING_MODAL'}
         return {'RUNNING_MODAL'}
-    
+	    # We need  this part to check the normals and flip them if necessary after extrude
+    def modal(self, context, event):
+        if event.type == 'MOUSEMOVE':
+            bpy.ops.mesh.select_linked()
+            bpy.ops.mesh.normals_make_consistent(inside=False)
+            bpy.ops.mesh.select_all(action='DESELECT')
+            print('extrude modal')
+            #bpy.ops.object.vertex_group_select()
+            #bpy.ops.object.vertex_group_remove(all=False, all_unlocked=False)
+            #bpy.ops.object.face_map_remove()
+            return {'FINISHED'}
+        if event.type in {'RIGHTMOUSE', 'ESC'}:
+            return {'CANCELLED'}
+        return {'RUNNING_MODAL'}
 
 class HP_OT_SmartScale(Operator):
     bl_idname = "view3d.smart_scale"        # unique identifier for buttons and menu items to reference.

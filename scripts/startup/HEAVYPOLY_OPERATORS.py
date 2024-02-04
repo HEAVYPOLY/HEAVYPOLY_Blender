@@ -226,9 +226,7 @@ class HP_OT_extrude(Operator):
             return {'FINISHED'}
 	
 
-        # Save Selection
        
-        print('Linked Selection Saved')
         mesh = context.object.data
         linkedface = mesh.total_face_sel
         print(linkedface)
@@ -256,48 +254,12 @@ class HP_OT_extrude(Operator):
             bpy.ops.mesh.normals_make_consistent(inside=False)
             bpy.ops.mesh.select_all(action='DESELECT')
             print('extrude modal')
-            #bpy.ops.object.vertex_group_select()
-            #bpy.ops.object.vertex_group_remove(all=False, all_unlocked=False)
-            #bpy.ops.object.face_map_remove()
             return {'FINISHED'}
         if event.type in {'RIGHTMOUSE', 'ESC'}:
             return {'CANCELLED'}
         return {'RUNNING_MODAL'}
 
-class HP_OT_SmartScale(Operator):
-    bl_idname = "view3d.smart_scale"        # unique identifier for buttons and menu items to reference.
-    bl_label = "Context Sensitive Scale"         # display name in the interface.
-    bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
-    # @classmethod
-    # def poll(cls, context):
-        # obj = context.active_object
-        # return (obj is not None and obj.mode == 'OBJECT')
-    def invoke(self, context, event):
-        modal = False
-        try:
-            for ob in bpy.context.selected_objects:
-                if ob.mode == 'OBJECT' and ob.children == () and ob.data.users == 1 and ob.type == 'MESH':
-                    modal = True
-                    print('running modal')
-        except:
-            pass
-        if modal:
-            context.window_manager.modal_handler_add(self)
-            print('Scaling MODAL')
-        bpy.ops.transform.resize('INVOKE_DEFAULT', mirror=True)
-        return {'RUNNING_MODAL'}
-    def modal(self, context, event):
-        print("MODAL " + event.type)
-        if event.type == 'MOUSEMOVE':
-            bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-            return {'FINISHED'}
-        # if event.type == 'LEFTMOUSE' and event.value == 'PRESS':
-        #     print('Applying Scale')
-        #     return {'FINISHED'}
-        elif event.type in {'RIGHTMOUSE', 'ESC'}:
-            return {'CANCELLED'}
-        else:
-            return {'RUNNING_MODAL'}
+
 class HP_OT_SmartBevel(bpy.types.Operator):
     bl_idname = "view3d.smart_bevel"        # unique identifier for buttons and menu items to reference.
     bl_label = "Smart Bevel"         # display name in the interface.
@@ -535,7 +497,6 @@ classes = (
     HP_OT_smart_snap_origin_collection,
     HP_OT_extrude,
     HP_OT_loopcut,
-    HP_OT_SmartScale,
     HP_OT_unhide,
     HP_OT_SetCollectionCenter
 )

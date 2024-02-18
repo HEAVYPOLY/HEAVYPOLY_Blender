@@ -11,13 +11,10 @@ The goal is to keep this overhaul as easy of an experience from this to Vanilla 
 
 
 Install Instructions:
-1. Install a **fresh** version of Blender.
+1. Install a **fresh** version of Blender, preferably as a portable version if your OS allows it.
 2. Start up Blender once.
 3. Go to the [Releases](https://github.com/HannahFantasia/HANNAH_Blender/releases) and download the latest version `.zip`
 4. Open your Blender installation folder.
 5. Click on the version folder, could be something like `4.1`
 6. Drop the contents of the `release.zip` inside the version folder.
-7. Open Blender and You're done ;)
-
-https://www.youtube.com/watch?v=TRESMUenxa8
-
+7. Open Blender inside the installation folder and You're done ;)

@@ -190,73 +190,102 @@ class HP_OT_PushAndSlide(bpy.types.Operator):
 
 
 class HP_OT_extrude(Operator):
-    """Context Sensitive Extrude"""
+    """Operator for context-sensitive extrusion in Blender.
+    It handles different extrusion types based on the current selection and object type."""
+    
     bl_label = "Context Sensitive Extrude"
     bl_idname = "mesh.hp_extrude"
     bl_options = {'REGISTER', 'UNDO'}
+    
     @classmethod
     def poll(cls, context):
+        """Check if the operator can be run in the current context."""
         obj = context.active_object
-        return (obj is not None and obj.mode == 'EDIT')
+        return obj is not None and obj.mode == 'EDIT'
 
     def invoke(self, context, event):
-
+        """The main function called when the operator is run."""
+        
+        # Handle curve objects separately
         if bpy.context.object.type == 'CURVE':
             bpy.ops.curve.extrude()
             bpy.ops.transform.translate('INVOKE_DEFAULT')
             print('EXTRUDING CURVES')
             return {'FINISHED'}
+        
+        # Get the active mesh and selection counts
         mesh = context.object.data
-        selface = mesh.total_face_sel
-        seledge = mesh.total_edge_sel
-        selvert = mesh.total_vert_sel
-        # Nothing Selected
-        if selvert == 0:
-            bpy.ops.mesh.select_mode(type = 'VERT')
+        total_faces_selected = mesh.total_face_sel
+        total_edges_selected = mesh.total_edge_sel
+        total_verts_selected = mesh.total_vert_sel
+
+        # Handle no selection by placing a new vertex
+        if total_verts_selected == 0:
+            bpy.ops.mesh.select_mode(type='VERT')
             bpy.ops.mesh.dupli_extrude_cursor('INVOKE_DEFAULT')
             print('PLACING VERT')
             return {'FINISHED'}
-        if selvert > 0 and seledge == 0:
+
+        # Extrude vertices if only vertices are selected
+        if total_verts_selected > 0 and total_edges_selected == 0:
             print('EXTRUDING VERTS')
             bpy.ops.mesh.extrude_region_move('INVOKE_DEFAULT')
             return {'FINISHED'}
-        if seledge > 0 and selface == 0:
+
+        # Extrude edges if only edges are selected
+        if total_edges_selected > 0 and total_faces_selected == 0:
             print('EXTRUDING EDGES')
             bpy.ops.mesh.extrude_region_move('INVOKE_DEFAULT')
             return {'FINISHED'}
-	
 
-       
-        mesh = context.object.data
-        linkedface = mesh.total_face_sel
-        print(linkedface)
-
-
+        # Extrude faces if any faces are selected
         print('EXTRUDING FACES')
         bpy.ops.mesh.extrude_region_move('EXEC_DEFAULT')
 
-        if linkedface != selface:
+        # Special handling for partial mesh selection
+        if total_faces_selected != mesh.total_face_sel:
             print('Partial mesh selected')
             bpy.ops.transform.shrink_fatten('INVOKE_DEFAULT', use_even_offset=True)
             return {'FINISHED'}
 
+        # Add this operator to the window manager for modal operations
         context.window_manager.modal_handler_add(self)
-        if selface > 0:
+
+        # Additional operations if faces were selected
+        if total_faces_selected > 0:
             print('Extruding Faces w vertex group')
             bpy.ops.transform.shrink_fatten('INVOKE_DEFAULT', use_even_offset=True)
             print('FIXING NORMALS')
             return {'RUNNING_MODAL'}
+        
         return {'RUNNING_MODAL'}
-	    # We need  this part to check the normals and flip them if necessary after extrude
+
     def modal(self, context, event):
+        """Handle modal operations for further adjustments after extrusion."""
         if event.type == 'MOUSEMOVE':
+            # Save the current selection of faces
+            obj = bpy.context.active_object
+            mesh = obj.data
+            bpy.ops.object.mode_set(mode='OBJECT')  # Switch to Object mode to safely access mesh data
+            selected_faces = [face.index for face in mesh.polygons if face.select]
+            bpy.ops.object.mode_set(mode='EDIT')  # Switch back to Edit mode
+            
+            # Recalculate normals and deselect everything
             bpy.ops.mesh.select_linked()
             bpy.ops.mesh.normals_make_consistent(inside=False)
             bpy.ops.mesh.select_all(action='DESELECT')
-            print('extrude modal')
+
+            # Reselect the previously selected faces
+            bpy.ops.object.mode_set(mode='OBJECT')  # Switch to Object mode to modify selection
+            for face_idx in selected_faces:
+                mesh.polygons[face_idx].select = True
+            bpy.ops.object.mode_set(mode='EDIT')  # Switch back to Edit mode
+
+            print('Extrude modal')
             return {'FINISHED'}
         if event.type in {'RIGHTMOUSE', 'ESC'}:
             return {'CANCELLED'}
+        
         return {'RUNNING_MODAL'}
 
 

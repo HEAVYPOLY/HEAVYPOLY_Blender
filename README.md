@@ -4,7 +4,7 @@ An adapted workflow for Blender 4.1 for tablet users and left handed people. (Al
 **IT IS RECOMMENDED THAT YOU KNOW THE DEFAULT KEYMAP OF BLENDER AND ARE USED TO A PIE MENU WORKFLOW, THIS OVERHAUL IS NOT FOR BEGINNERS**
 
 I have been using the [HEAVYPOLY_BLENDER](https://github.com/HEAVYPOLY/HEAVYPOLY_Blender) setup since 2020, mainly for accessiblity reasons as RSI developed in my right hand.\
-In 2022 I have started out doing a few PRs to optimize it for later blender versions. Down the line I started deleting scripts inside it that I didn't use.
+In 2022 I have started out doing a few PRs to optimize it for later blender versions. Down the line I started deleting scripts inside it that I didn't use and will add many more in the future.
 
 This overhaul may exist with your installed addons. This addon covers built in addons and does not rely on external ones to do certain operations.\
 Change preferences accordingly, Built in addons should be covered. Externally installed ones are not.

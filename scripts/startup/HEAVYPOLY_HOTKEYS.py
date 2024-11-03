@@ -165,11 +165,11 @@ def Keymap_Hannah():
 # Map Grease Pencil
     km = get_keymap_items_ctx(bpy.context.window_manager,'Blender',  'Grease Pencil')
     Global_Keys()
-    keymap = add_keymap_attrs(km, 'gpencil.select_linked', 'LEFTMOUSE', 'DOUBLE_CLICK')
     keymap = add_keymap_attrs(km, 'gpencil.select_linked', 'LEFTMOUSE', 'DOUBLE_CLICK', shift=True)
 
 # Map Image Paint
     km = get_keymap_items_ctx(bpy.context.window_manager,'Blender',  'Image Paint')
+    Global_Keys()
     keymap = add_keymap_attrs(km, 'paint.sample_color', 'S', 'PRESS')
 
 # Map Object Mode

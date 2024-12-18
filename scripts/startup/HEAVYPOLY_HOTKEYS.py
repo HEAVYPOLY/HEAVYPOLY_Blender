@@ -3,7 +3,7 @@ bl_info = {
     "description": "Hotkeys",
     "author": "Vaughan Ling",
     "version": (0, 1, 0),
-    "blender": (2, 90, 0),
+    "blender": (4, 0, 0),
     "location": "",
     "warning": "",
     "wiki_url": "",
@@ -33,6 +33,7 @@ def Keymap_Heavypoly():
     k_menu = 'SPACE'
     k_select = 'LEFTMOUSE'
 
+
     def Global_Keys():
 
         kmi = km.keymap_items.new("screen.userpref_show","TAB","PRESS", ctrl=True)
@@ -52,6 +53,7 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new('object.hide_viewport', 'H', 'PRESS')
     kmi = km.keymap_items.new('wm.save_homefile', 'U', 'PRESS', ctrl=True)
     kmi = km.keymap_items.new('transform.translate', 'SPACE', 'PRESS')
+    #kmi = km.keymap_items.new('object.modal_translate', 'SPACE', 'PRESS')
 
     kmi = km.keymap_items.new('view3d.smart_delete', 'X', 'PRESS')
     kmi = km.keymap_items.new('mesh.dissolve_mode', 'X', 'PRESS',ctrl=True)
@@ -69,6 +71,9 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new("screen.repeat_last","THREE","PRESS", ctrl=True, shift=True)
     kmi = km.keymap_items.new("ed.undo","TWO","PRESS", ctrl=True, shift=True)
     kmi = km.keymap_items.new('screen.frame_jump', 'PERIOD', 'PRESS', shift=True)
+
+
+
 # Map Image
     km = kc.keymaps.new('Image', space_type='IMAGE_EDITOR', region_type='WINDOW', modal=False)
     Global_Keys()
@@ -94,8 +99,15 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new('action.select_box', 'LEFTMOUSE', 'CLICK_DRAG')
     kmi_props_setattr(kmi.properties, 'mode', 'SET')
 # Map DOPESHEET_EDITOR
-    km = kc.keymaps.new('Dopesheet Editor', space_type='DOPESHEET_EDITOR', region_type='WINDOW', modal=False)
+    km = kc.keymaps.new('Dopesheet', space_type='DOPESHEET_EDITOR', region_type='WINDOW', modal=False)
     Global_Keys()
+    #Dopesheet transform fix
+    kmi = km.keymap_items.new('transform.transform', 'SPACE', 'PRESS', repeat=True)
+    kmi.properties.mode = 'TIME_TRANSLATE'
+    print(f"Created keymap: {km.name}")
+    print(f"Added keymap item: {kmi.idname} ({kmi.type})")
+
+
     kmi = km.keymap_items.new('time.cursor_set', k_select, 'PRESS', alt = True)
     kmi = km.keymap_items.new('time.start_frame_set', 'S', 'PRESS')
     kmi = km.keymap_items.new('time.end_frame_set', 'E', 'PRESS')
@@ -158,10 +170,14 @@ def Keymap_Heavypoly():
     kmi = km.keymap_items.new("view3d.smart_snap_origin","RIGHTMOUSE","PRESS",ctrl=True, shift=True)
     kmi = km.keymap_items.new("view3d.smart_snap_cursor","RIGHTMOUSE","PRESS",ctrl=True)
     kmi = km.keymap_items.new("view3d.smart_snap_origin_collection","RIGHTMOUSE","PRESS",ctrl=True, shift=True, alt=True)
+
+
 #Mesh
     km = kc.keymaps.new(name='Mesh')
     Global_Keys()
-#    kmi = km.keymap_items.new('wm.toolbar', 'SPACE', 'PRESS')
+    # Double move operator
+    #kmi = km.keymap_items.new("wm.modal_move_operator", 'SPACE', 'PRESS')
+    #kmi = km.keymap_items.new('wm.toolbar', 'SPACE', 'PRESS')
     kmi = km.keymap_items.new('view3d.render_border', 'Z', 'PRESS', shift=True)
     # kmi = km.keymap_items.new('view3d.clear_render_border', 'Z', 'PRESS', shift=True, ctrl=True)
     kmi = km.keymap_items.new("mesh.dupli_extrude_cursor", 'E', 'PRESS')
@@ -235,6 +251,11 @@ def Keymap_Heavypoly():
 #    kmi_props_setattr(kmi.properties, 'action', 'INVERT')
     kmi = km.keymap_items.new('object.hide_view_clear', 'H', 'PRESS', ctrl=True, shift=True)
 
+#Sculpt Mode
+    km = kc.keymaps.new(name='Sculpt')
+    Global_Keys()
+    kmi = km.keymap_items.new("wm.call_menu_pie", 'V', 'PRESS').properties.name="HP_MT_pie_view"
+
 # Map Curve
     km = kc.keymaps.new('Curve', space_type='EMPTY', region_type='WINDOW', modal=False)
     Global_Keys()
@@ -251,11 +272,135 @@ def Keymap_Heavypoly():
 
     kmi = km.keymap_items.new('wm.delete_without_prompt', 'X', 'PRESS')
 
+# Lattice
+    km = kc.keymaps.new(name='Lattice')
+    Global_Keys()
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG', shift=False, ctrl=False)
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG', shift=True, ctrl=False)
+    kmi_props_setattr(kmi.properties, 'mode', 'ADD')
+    kmi = km.keymap_items.new('view3d.select_box', 'LEFTMOUSE', 'CLICK_DRAG', shift=False, ctrl=True)
+    kmi_props_setattr(kmi.properties, 'mode', 'SUB')
+
+
+
+
+#Function to disable keymap confict
+def disable_default_kmi(km=None, idname=None, retries=1):
+    wm = bpy.context.window_manager
+
+    if not (km and idname) or retries < 1:
+        return
+
+    # the default keyconfig
+    kc = wm.keyconfigs['Blender']
+    for kmi in kc.keymaps[km].keymap_items:
+        if kmi.idname == idname:
+            kmi.active = False
+            print("Disabled", kmi.name)
+            return
+
+    print("Retrying..")
+    # add some delay
+    bpy.app.timers.register(
+        lambda: disable_default_kmi(km, idname,retries - 1),
+        first_interval=0.1)
+    
+def disable_specific_kmi(km=None, idname=None, type=None, value=None, shift=None, ctrl=None, alt=None,  retries=1):
+    wm = bpy.context.window_manager
+
+    if not (km and idname) or retries < 1:
+        return
+
+    # the default keyconfig
+    kc = wm.keyconfigs['Blender']
+    for kmi in kc.keymaps[km].keymap_items:
+        if kmi.idname == idname and kmi.type == type and kmi.value == value and kmi.shift == shift and kmi.ctrl == ctrl and kmi.alt == alt:
+            kmi.active = False
+            print("Disabled", kmi.name)
+            return
+
+    print("Retrying..")
+    # add some delay
+    bpy.app.timers.register(
+        lambda: disable_specific_kmi(km, idname, type, value, shift, ctrl, alt, retries - 1),
+        first_interval=0.1)
+
+def get_active_kmi(space: str, **kwargs) -> bpy.types.KeyMapItem:
+    kc = bpy.context.window_manager.keyconfigs.active
+    km = kc.keymaps.get(space)
+    if km:
+        for kmi in km.keymap_items:
+            for key, val in kwargs.items():
+                if getattr(kmi, key) != val and val is not None:
+                    break
+            else:
+                return kmi
+
 
 
 
 def register():
     Keymap_Heavypoly()
+
+    disable_default_kmi('Object Mode', 'transform.resize')
+    disable_specific_kmi('Object Mode', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    disable_default_kmi('Object Mode', 'object.delete')
+    disable_default_kmi('Object Mode', 'screen.animation_play')
+
+    disable_specific_kmi('Curve', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    
+    disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+
+    disable_default_kmi('Window', 'screen.animation_play')
+
+    disable_default_kmi('Frames', 'screen.animation_play')
+
+    disable_default_kmi('Mesh', 'wm.call_menu')
+
+    disable_specific_kmi('Sculpt', 'paint.brush_select','V','PRESS',False,False,False)
+
+    disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',True,False,False)
+    disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',False,True,False)
+    disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',True,True,False)
+    
+    
+    kmi = get_active_kmi("3D View Tool: Move",
+                         idname="transform.translate",
+                         type='LEFTMOUSE',
+                         value='CLICK_DRAG',
+                         shift=False,
+                         ctrl=False,
+                         alt=False)
+    kmi.active = False
+    kmi = get_active_kmi("Pose",
+                         idname="transform.translate",
+                         type='LEFTMOUSE',
+                         value='CLICK_DRAG',
+                         shift=False,
+                         ctrl=False,
+                         alt=False)
+    kmi.active = False
+    kmi = get_active_kmi("Mesh",
+                         idname="wm.call_menu",
+                         type='X',
+                         shift=False,
+                         ctrl=False,
+                         alt=False)
+    kmi.active = False
+    kmi = get_active_kmi("Frames",
+                         idname="screen.animation_play",
+                         type='SPACE',
+                         shift=True,
+                         ctrl=True,
+                         alt=False)
+    kmi.active = False
+
+        
+
+    
+
 
 def unregister():
     Keymap_Heavypoly()

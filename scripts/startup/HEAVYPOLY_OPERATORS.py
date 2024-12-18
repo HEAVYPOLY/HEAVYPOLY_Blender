@@ -199,6 +199,18 @@ class HP_OT_extrude(Operator):
         obj = context.active_object
         return (obj is not None and obj.mode == 'EDIT')
 
+    def modal(self, context, event):
+        if event.type == 'MOUSEMOVE':
+            return {'RUNNING_MODAL'}
+
+        if event.type in {'LEFTMOUSE', 'RET'}:
+            return {'FINISHED'}
+
+        if event.type in {'RIGHTMOUSE', 'ESC'}:
+            return {'CANCELLED'}
+
+        return {'RUNNING_MODAL'}
+
     def invoke(self, context, event):
 
         if bpy.context.object.type == 'CURVE':
@@ -504,6 +516,54 @@ class HP_OT_SetCollectionCenter(bpy.types.Operator):
        # bpy.ops.object.instance_offset_from_cursor()
         return {'FINISHED'}
 
+#### MOVE SPACE Y AXIS #####
+
+
+class HP_TranslateModalOperator(bpy.types.Operator):
+    """Toggle Move Mode and Y Constraint"""
+    bl_idname = "object.modal_translate"
+    bl_label = "Modal Translate"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    is_moving: bpy.props.BoolProperty(default=False)
+    constrain_y: bpy.props.BoolProperty(default=False)
+
+    def modal(self, context, event):
+        # Listen for keypresses
+        if event.type == 'SPACE' and event.value == 'PRESS':
+            # Toggle Y-axis constraint
+            self.constrain_y = not self.constrain_y
+            self.report({'INFO'}, f"Y-axis constraint {'enabled' if self.constrain_y else 'disabled'}")
+            
+            # Restart the transform operator with updated constraints
+            bpy.ops.transform.translate(
+                'INVOKE_DEFAULT',
+                constraint_axis=(False, self.constrain_y, False)  # X, Y, Z constraints
+            )
+            return {'RUNNING_MODAL'}
+
+        if event.type in {'LEFTMOUSE', 'RET'}:  # Confirm operation
+            self.report({'INFO'}, "Transform Confirmed")
+            self.is_moving = False
+            return {'FINISHED'}
+
+        elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel operation
+            self.report({'INFO'}, "Transform Canceled")
+            self.is_moving = False
+            bpy.ops.ed.undo()  # Undo the transform
+            return {'CANCELLED'}
+
+        return {'RUNNING_MODAL'}
+
+    def invoke(self, context, event):
+        # Start the transform operator
+        self.is_moving = True
+        self.constrain_y = False  # Default: no constraint
+        bpy.ops.transform.translate('INVOKE_DEFAULT')
+
+        # Add a modal handler for post-transform actions
+        context.window_manager.modal_handler_add(self)
+        return {'RUNNING_MODAL'}
 
 
 classes = (
@@ -524,7 +584,9 @@ classes = (
     HP_OT_loopcut,
     HP_OT_SmartScale,
     HP_OT_unhide,
-    HP_OT_SetCollectionCenter
+    HP_OT_SetCollectionCenter,
+    HP_TranslateModalOperator,
+
 )
 register, unregister = bpy.utils.register_classes_factory(classes)
 

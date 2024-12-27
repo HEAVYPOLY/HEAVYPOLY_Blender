@@ -11,6 +11,7 @@ bl_info = {
     }
 
 import bpy
+import math
 from bpy.types import Menu
 
 class HP_MT_pie_shading(Menu):
@@ -83,7 +84,7 @@ class HP_MT_pie_shading(Menu):
         box.prop(context.scene.eevee, "use_soft_shadows", text="SOFT SHADOWS")
         # box.prop(overlay, "show_backface_culling", text="HIDE BACKFACES")
         box.prop(overlay, "show_cursor", text="3D CURSOR")
-        box.operator("view3d.smart_shade_smooth_toggle", text = 'Shade Smooth')
+        box.operator("object.add_normal_modifier", text = 'Shade Smooth')
 #        pie.operator("view3d.toggle_background_hide", text="Toggle BG Hide")
 
 
@@ -144,13 +145,74 @@ class HP_OT_shading_bg_wire(bpy.types.Operator):
         bpy.ops.object.select_all(action='INVERT')
         return {'FINISHED'}
     
+####### Auto-Smooth Modifier
+
+def add_smooth_by_angle(obj):
+    if obj.type != 'MESH':
+        print(f"Skipping '{obj.name}' (not a mesh object).")
+        return
+
+    angle = math.radians(40)
+
+    # Check if the object already has a "Smooth by Angle" modifier
+    existing_modifier = next((mod for mod in obj.modifiers if mod.name == "Smooth by Angle"), None)
+
+    if existing_modifier:
+        # Toggle the existing modifier's visibility
+        existing_modifier.show_viewport = not existing_modifier.show_viewport
+        state = "enabled" if existing_modifier.show_viewport else "disabled"
+        print(f"'Smooth by Angle' modifier toggled {state} on object '{obj.name}'.")
+    else:
+        # Add the "Smooth by Angle" modifier
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.modifier_add_node_group(
+            asset_library_type='ESSENTIALS',
+            asset_library_identifier="",
+            relative_asset_identifier="geometry_nodes\\smooth_by_angle.blend\\NodeTree\\Smooth by Angle"
+        )
+
+        # Rename the modifier to "Smooth by Angle" explicitly
+        modifier = obj.modifiers[-1]  # The most recently added modifier
+        modifier.name = "Smooth by Angle"
+
+        # Configure the modifier
+        modifier["Input_1"] = angle
+        modifier["Socket_1"] = True
+        obj.data.update()
+
+        print(f"'Smooth by Angle' modifier added to object '{obj.name}'.")
+    bpy.context.view_layer.objects.active = obj
+
+# Operator to handle adding the Normal modifier
+class HP_OT_add_normal_modifier(bpy.types.Operator):
+    bl_idname = "object.add_normal_modifier"
+    bl_label = "Add Normal Modifier"
+    bl_description = "Add a Normal modifier to the selected objects and enable 'Ignore Sharpness'"
+
+    def execute(self, context):
+        # Check if objects are selected
+        selected_objects = context.selected_objects
+        if not selected_objects:
+            self.report({'WARNING'}, "No objects selected.")
+            return {'CANCELLED'}
+
+        # Add Normal modifier to each selected object
+        for obj in selected_objects:
+            if obj.type in {'MESH'}:  # Only apply to mesh objects
+                add_smooth_by_angle(obj)
+            else:
+                self.report({'WARNING'}, f"Object '{obj.name}' is not a mesh.")
+
+        return {'FINISHED'}
+    
 classes = (
     HP_MT_pie_shading,
     HP_OT_shading_wire,
     HP_OT_shading_material,
     HP_OT_shading_solid,
     HP_OT_shading_rendered,
-    HP_OT_shading_bg_wire
+    HP_OT_shading_bg_wire,
+    HP_OT_add_normal_modifier
 )
 register, unregister = bpy.utils.register_classes_factory(classes)
 

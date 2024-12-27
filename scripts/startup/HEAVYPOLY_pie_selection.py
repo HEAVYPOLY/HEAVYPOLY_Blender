@@ -19,8 +19,8 @@ class HP_MT_pie_select(Menu):
 
     def draw(self, context):
         layout = self.layout
-
         pie = layout.menu_pie()
+        mode = context.mode
 
         # left
         if bpy.context.mode == 'OBJECT':
@@ -43,10 +43,20 @@ class HP_MT_pie_select(Menu):
             case "SCULPT":
                 pie.operator("object.voxel_remesh", text="Remesh", icon='NONE')
             case _:
-                pie.operator("object.select_grouped", text="Select Collection", icon='NONE').type='COLLECTION'
+                split = pie.split()
+                col = split.column()
+                col.scale_y=1.5
+                col.operator("object.select_grouped", text="Select Collection", icon='NONE').type='COLLECTION'
+                col.operator("object.hp_select_hierarchy", text="Select Hierarchy")
+                
+
 
         # bottom
-        pie.operator("object.mode_set", text="Object", icon='MESH_CUBE').mode='OBJECT'
+        if mode == 'OBJECT':
+            #pie.operator("wm.hp_open_extra_pie", text="Extra", icon='MESH_CUBE')
+            pie.operator("object.mode_set", text="Object", icon='MESH_CUBE').mode = 'OBJECT'
+        else:
+            pie.operator("object.mode_set", text="Object", icon='MESH_CUBE').mode = 'OBJECT'
         # top
 
         match bpy.context.object.type:
@@ -118,6 +128,8 @@ class HP_MT_pie_select(Menu):
         col.separator()
         col.separator()
         col.separator()
+        col.separator()
+
 
         match bpy.context.object.type:
             case "MESH":
@@ -239,6 +251,29 @@ class HP_OT_select_border(bpy.types.Operator):
         bpy.ops.mesh.select_mode(type='EDGE')
         bpy.ops.mesh.region_to_loop()
         return {'FINISHED'}
+    
+class HP_OT_select_hierarchy(bpy.types.Operator):
+    """Select Hierarchy"""    # blender will use this as a tooltip for menu items and buttons.
+    bl_idname = "object.hp_select_hierarchy"        # unique identifier for buttons and menu items to reference.
+    bl_label = "Select Hierarchy"        # display name in the interface.
+    bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
+
+    def invoke(self, context, event):
+        selection = bpy.context.active_object
+        if selection:  # Ensure there is an active object.
+            bpy.ops.object.select_grouped(type='CHILDREN_RECURSIVE')
+            selection.select_set(True)  # Call the method, passing `True` to select the object.
+        return {'FINISHED'}
+    
+class HP_OT_extra_pie(bpy.types.Operator):
+    """Open Second Pie Menu"""
+    bl_idname = "wm.hp_open_extra_pie"
+    bl_label = "Open Extra Pie"
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="HP_MT_pie_extra")
+        return {'FINISHED'}
+
 
 classes = (
     HP_MT_pie_select,
@@ -248,6 +283,8 @@ classes = (
     HP_OT_sculpt_mode_with_dynotopo,
     HP_OT_gp_canvas,
     HP_OT_select_border,
+    HP_OT_select_hierarchy,
+    HP_OT_extra_pie,
 )
 register, unregister = bpy.utils.register_classes_factory(classes)
 

@@ -272,6 +272,7 @@ def Keymap_Heavypoly():
 
     kmi = km.keymap_items.new('wm.delete_without_prompt', 'X', 'PRESS')
 
+
 # Lattice
     km = kc.keymaps.new(name='Lattice')
     Global_Keys()
@@ -306,10 +307,15 @@ def disable_default_kmi(km=None, idname=None, retries=1):
         first_interval=0.1)
     
 def disable_specific_kmi(km=None, idname=None, type=None, value=None, shift=None, ctrl=None, alt=None,  retries=1):
+
+#Function to disable keymap confict
+def disable_default_kmi(km=None, idname=None, retries=10):
+
     wm = bpy.context.window_manager
 
     if not (km and idname) or retries < 1:
         return
+
 
     # the default keyconfig
     kc = wm.keyconfigs['Blender']
@@ -337,10 +343,27 @@ def get_active_kmi(space: str, **kwargs) -> bpy.types.KeyMapItem:
                 return kmi
 
 
+    # the default keyconfig
+    kc = wm.keyconfigs['Blender']
+    for kmi in kc.keymaps[km].keymap_items:
+        if kmi.idname == idname:
+            kmi.active = False
+            print("Disabled", kmi.name)
+            return
 
+    print("Retrying..")
+    # add some delay
+    bpy.app.timers.register(
+        lambda: disable_default_kmi(km, idname, retries - 1),
+        first_interval=0.1)
 
 def register():
     Keymap_Heavypoly()
+    #disabling Resize so there is only SmartScale being used on S
+    disable_default_kmi('Object Mode', 'transform.resize')
+    #disabling this one to remove a weird bug,not being able to release mouse after a move
+    disable_default_kmi('3D View', 'transform.translate')
+
 
     disable_default_kmi('Object Mode', 'transform.resize')
     disable_specific_kmi('Object Mode', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)

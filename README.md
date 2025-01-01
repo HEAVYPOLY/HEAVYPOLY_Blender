@@ -7,7 +7,9 @@ Scripts and Pie Menus designed to make Blender more streamlined.  Designed for u
 Download Instructions:
 
 Blender 4.3 and above - Click the Green button at top right, then download zip
+
 Blender 4.0 to 4.2 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
+
 Blender 3.x - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 

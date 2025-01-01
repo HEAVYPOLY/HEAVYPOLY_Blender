@@ -7,11 +7,7 @@ Download Instructions:
 
 Blender 4.3 and above - Click the Green button at top right, then download zip
 
-Blender 4.1 to 4.2 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
-
-Blender 4.0 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
-
-Blender 3.x - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
+Blender 3.6 to 4.2 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 
 Windows install:

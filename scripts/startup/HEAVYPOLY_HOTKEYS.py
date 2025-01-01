@@ -299,6 +299,7 @@ def disable_default_kmi(km=None, idname=None, retries=1):
             print("Disabled", kmi.name)
             return
 
+    print("Retrying..")
     # add some delay
     bpy.app.timers.register(
         lambda: disable_default_kmi(km, idname,retries - 1),
@@ -306,8 +307,10 @@ def disable_default_kmi(km=None, idname=None, retries=1):
     
 def disable_specific_kmi(km=None, idname=None, type=None, value=None, shift=None, ctrl=None, alt=None,  retries=1):
     wm = bpy.context.window_manager
+
     if not (km and idname) or retries < 1:
         return
+
     # the default keyconfig
     kc = wm.keyconfigs['Blender']
     for kmi in kc.keymaps[km].keymap_items:
@@ -316,6 +319,7 @@ def disable_specific_kmi(km=None, idname=None, type=None, value=None, shift=None
             print("Disabled", kmi.name)
             return
 
+    print("Retrying..")
     # add some delay
     bpy.app.timers.register(
         lambda: disable_specific_kmi(km, idname, type, value, shift, ctrl, alt, retries - 1),
@@ -337,6 +341,7 @@ def get_active_kmi(space: str, **kwargs) -> bpy.types.KeyMapItem:
 
 def register():
     Keymap_Heavypoly()
+
     disable_default_kmi('Object Mode', 'transform.resize')
     disable_specific_kmi('Object Mode', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_default_kmi('Object Mode', 'object.delete')
@@ -345,12 +350,7 @@ def register():
     disable_specific_kmi('Curve', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
-    disable_specific_kmi('Grease Pencil Edit Mode', 'wm.call_menu','X','PRESS',False,False,False)
-#DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
-
-
-
-    disable_default_kmi('Object Mode', 'object.delete')
+    disable_specific_kmi('Grease Pencil', 'wm.call_menu','X','PRESS',False,False,False)
 
     disable_default_kmi('Window', 'screen.animation_play')
 
@@ -359,7 +359,7 @@ def register():
     disable_default_kmi('Mesh', 'wm.call_menu')
 
     disable_specific_kmi('Sculpt', 'paint.brush_select','V','PRESS',False,False,False)
-    
+
     disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',True,False,False)
     disable_specific_kmi('3D View Tool: Select Box', 'view3d.select_box','LEFTMOUSE','CLICK_DRAG',False,True,False)
@@ -388,14 +388,6 @@ def register():
                          shift=False,
                          ctrl=False,
                          alt=False)
-    kmi.active = False
-    kmi = get_active_kmi("Grease Pencil Edit Mode",
-                         idname="wm.call_menu",
-                         type='X',
-                         shift=False,
-                         ctrl=False,
-                         alt=False)
-    print ("Disable GP Edit X")
     kmi.active = False
     kmi = get_active_kmi("Frames",
                          idname="screen.animation_play",

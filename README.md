@@ -12,7 +12,7 @@ Blender 3.x - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 Windows install:
 - Unzip the **HeavyPoly Config**
-- Copy the folders "**Config**" and "**Scripts**" at this location: **C:\Users\%USERPROFILE%\AppData\Roaming\Blender Foundation\Blender\4.3** (adjust Blender version to your need.
+- Copy the folders "**Config**" and "**Scripts**" at this location: **C:\Users\ USERNAME \AppData\Roaming\Blender Foundation\Blender\4.3** (adjust Blender version to your need.
 (Or other Blender version)
 
 Mac install:

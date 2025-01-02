@@ -4,15 +4,15 @@ Scripts and Pie Menus designed to make Blender more streamlined.  Designed for u
 
 
 Download Instructions:
+ 
+Blender 4.0 and above - Click the Green button at top right, then download zip
 
-Blender 4.3 and above - Click the Green button at top right, then download zip
-
-Blender 3.6 to 4.2 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
+Blender 3.x - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 
 Windows install:
 - Unzip the **HeavyPoly Config**
-- Copy the folders "**Config**" and "**Scripts**" at this location: **C:\Users\ USERNAME \AppData\Roaming\Blender Foundation\Blender\4.3** (adjust Blender version to your need.
+- Copy the folders "**Config**" and "**Scripts**" at this location: **C:\Users\%USERPROFILE%\AppData\Roaming\Blender Foundation\Blender\4.3** (adjust Blender version to your need.
 (Or other Blender version)
 
 Mac install:

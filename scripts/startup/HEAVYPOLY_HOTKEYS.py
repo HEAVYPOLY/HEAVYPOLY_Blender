@@ -372,8 +372,8 @@ def register():
 
     disable_specific_kmi('Curve', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
-    disable_specific_kmi('Grease Pencil', 'wm.call_menu','X','PRESS',False,False,False)
 
     disable_default_kmi('Window', 'screen.animation_play')
 

@@ -306,6 +306,10 @@ def disable_default_kmi(km=None, idname=None, retries=1):
         first_interval=0.1)
     
 def disable_specific_kmi(km=None, idname=None, type=None, value=None, shift=None, ctrl=None, alt=None,  retries=1):
+
+#Function to disable keymap confict
+def disable_default_kmi(km=None, idname=None, retries=10):
+
     wm = bpy.context.window_manager
 
     if not (km and idname) or retries < 1:
@@ -337,7 +341,19 @@ def get_active_kmi(space: str, **kwargs) -> bpy.types.KeyMapItem:
                 return kmi
 
 
+    # the default keyconfig
+    kc = wm.keyconfigs['Blender']
+    for kmi in kc.keymaps[km].keymap_items:
+        if kmi.idname == idname:
+            kmi.active = False
+            print("Disabled", kmi.name)
+            return
 
+    print("Retrying..")
+    # add some delay
+    bpy.app.timers.register(
+        lambda: disable_default_kmi(km, idname, retries - 1),
+        first_interval=0.1)
 
 def register():
     Keymap_Heavypoly()
@@ -349,8 +365,11 @@ def register():
 
     disable_specific_kmi('Curve', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+    
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+
     disable_specific_kmi('Grease Pencil', 'wm.call_menu','X','PRESS',False,False,False)
+
 
     disable_default_kmi('Window', 'screen.animation_play')
 

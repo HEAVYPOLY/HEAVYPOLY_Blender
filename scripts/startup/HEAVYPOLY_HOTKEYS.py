@@ -2,8 +2,8 @@ bl_info = {
     "name": "Heavypoly Hotkeys",
     "description": "Hotkeys",
     "author": "Vaughan Ling",
-    "version": (0, 1, 0),
-    "blender": (4, 0, 0),
+    "version": (0, 2, 0),
+    "blender": (4, 1, 0),
     "location": "",
     "warning": "",
     "wiki_url": "",
@@ -272,7 +272,6 @@ def Keymap_Heavypoly():
 
     kmi = km.keymap_items.new('wm.delete_without_prompt', 'X', 'PRESS')
 
-
 # Lattice
     km = kc.keymaps.new(name='Lattice')
     Global_Keys()
@@ -316,7 +315,6 @@ def disable_default_kmi(km=None, idname=None, retries=10):
     if not (km and idname) or retries < 1:
         return
 
-
     # the default keyconfig
     kc = wm.keyconfigs['Blender']
     for kmi in kc.keymaps[km].keymap_items:
@@ -359,11 +357,6 @@ def get_active_kmi(space: str, **kwargs) -> bpy.types.KeyMapItem:
 
 def register():
     Keymap_Heavypoly()
-    #disabling Resize so there is only SmartScale being used on S
-    disable_default_kmi('Object Mode', 'transform.resize')
-    #disabling this one to remove a weird bug,not being able to release mouse after a move
-    disable_default_kmi('3D View', 'transform.translate')
-
 
     disable_default_kmi('Object Mode', 'transform.resize')
     disable_specific_kmi('Object Mode', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
@@ -374,6 +367,9 @@ def register():
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
     
     disable_specific_kmi('Curves', 'transform.translate','LEFTMOUSE','CLICK_DRAG',False,False,False)
+
+    disable_specific_kmi('Grease Pencil', 'wm.call_menu','X','PRESS',False,False,False)
+
 
     disable_default_kmi('Window', 'screen.animation_play')
 

@@ -16,8 +16,14 @@ Blender 3.6 and 4.0 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 Windows install:
 - Unzip the **HeavyPoly Config**
-- Copy the folders "**Config**" and "**Scripts**" at this location: **C:\Users\%USERPROFILE%\AppData\Roaming\Blender Foundation\Blender\4.3** (adjust Blender version to your need.
+- Copy the folders "**Config**" and "**Scripts**" at this location:
+
+For portable version of Blender (.zip) : **ExtractedBlenderfolder\4.3\**
+
+For installed version of  Blender (.exe) :  **C:\Users\ %USERPROFILE% \AppData\Roaming\Blender Foundation\Blender\4.3\** (adjust Blender version to your need.
 (Or other Blender version)
+
+
 
 Mac install:
 - You need to have launched Blender once first.

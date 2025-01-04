@@ -352,12 +352,16 @@ class HP_OT_SeparateAndSelect(bpy.types.Operator):
             bpy.ops.mesh.separate(type='SELECTED')
         elif bpy.context.object.type == 'GPENCIL':
             bpy.ops.gpencil.stroke_separate(mode='POINT')
+        elif bpy.context.object.type == 'GREASEPENCIL':
+            bpy.ops.grease_pencil.stroke_separate(mode='POINT')
 
             # bpy.ops.gpencil.stroke_split()
         elif bpy.context.object.type == 'CURVE':
             bpy.ops.curve.separate()
         if bpy.context.object.type == 'GPENCIL':
             bpy.ops.gpencil.editmode_toggle()
+        elif bpy.context.object.type == 'GREASEPENCIL':
+            bpy.ops.object.mode_set('EDIT', toggle=True)
         else:
             bpy.ops.object.editmode_toggle()
             
@@ -367,6 +371,8 @@ class HP_OT_SeparateAndSelect(bpy.types.Operator):
         bpy.context.view_layer.objects.active = selected[-1]
         if bpy.context.object.type == 'GPENCIL':
             bpy.ops.gpencil.editmode_toggle()
+        elif bpy.context.object.type == 'GREASEPENCIL':
+            bpy.ops.grease_pencil.editmode_toggle()
         else:
             bpy.ops.object.editmode_toggle()
         if bpy.context.object.type == 'MESH':
@@ -407,51 +413,72 @@ class HP_OT_toggle_render_material(bpy.types.Operator):
         return {'FINISHED'}
 
 
+
 class HP_OT_Smart_Delete(bpy.types.Operator):
-    bl_idname = "view3d.smart_delete"        # unique identifier for buttons and menu items to reference.
-    bl_label = ""         # display name in the interface.
-    bl_options = {'REGISTER', 'UNDO'}  # enable undo for the operator.
+    bl_idname = "view3d.smart_delete"
+    bl_label = "Smart Delete"
+    bl_options = {'REGISTER', 'UNDO'}
 
     def invoke(self, context, event):
         obj = context.object
         objType = getattr(obj, 'type', '')
         act = bpy.context.active_object
+
         try:
             if not act:
                 for o in bpy.context.selected_objects:
                     bpy.context.view_layer.objects.active = o
                     act = bpy.context.active_object
-            actname = act.name
+
+            actname = act.name if act else ""
+
+            # Object mode deletion logic
             if context.active_object.mode == 'OBJECT':
-                if '_Cutter' in act.name and context.active_object.mode == 'OBJECT':
+                if '_Cutter' in actname:
                     bpy.ops.object.delete(use_global=False)
-#                    bpy.ops.object.select_all(action='SELECT')
-#                    for o in bpy.context.selected_objects:
-                    for buttsniffers in bpy.context.view_layer.objects:
-                        bpy.context.view_layer.objects.active = buttsniffers
+                    for obj in bpy.context.view_layer.objects:
+                        bpy.context.view_layer.objects.active = obj
                         bpy.ops.object.modifier_remove(modifier=actname)
                 else:
                     bpy.ops.object.delete(use_global=False)
-                #bpy.ops.object.select_all(action='DESELECT')
+
+            # Edit mode deletion for different object types
             elif objType == 'CURVE':
                 if context.active_object.mode != 'OBJECT':
                     bpy.ops.curve.delete(type='VERT')
-            elif objType == 'GPENCIL':
-                if context.active_object.mode != 'OBJECT':
-                    bpy.ops.gpencil.delete(type='POINTS')
 
+            # Grease Pencil handling (GPENCIL for 4.2, GREASEPENCIL for 4.3+)
+            elif objType in {'GPENCIL', 'GREASEPENCIL'}:
+                if context.active_object.mode != 'OBJECT':
+                    if bpy.app.version < (4, 3, 0):
+                        bpy.ops.gpencil.delete(type='POINTS')
+                    else:
+                        # Blender 4.3+ Grease Pencil API handling
+                        bpy.ops.grease_pencil.delete()
+
+            # Meta object handling
             elif objType == 'META':
                 if context.active_object.mode != 'OBJECT':
                     bpy.ops.mball.delete_metaelems()
+
+            # Mesh handling
             elif objType == 'MESH':
                 if context.active_object.mode != 'OBJECT':
                     if tuple(bpy.context.scene.tool_settings.mesh_select_mode) == (False, False, True):
                         bpy.ops.mesh.delete(type='FACE')
                     else:
                         bpy.ops.mesh.delete(type='VERT')
-        except:
-            pass
+
+        except Exception as e:
+            print(f"Error in Smart Delete: {e}")
+        
         return {'FINISHED'}
+
+
+
+
+
+
 
 class HP_OT_Subdivision_Toggle(bpy.types.Operator):
     bl_idname = "view3d.subdivision_toggle"

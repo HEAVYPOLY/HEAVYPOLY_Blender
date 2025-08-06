@@ -18,7 +18,7 @@ For installed version of  Blender:
 - Unzip the **HeavyPoly Config** at the location: **C:\Users\ %USERPROFILE% \AppData\Roaming\Blender Foundation\Blender\4.3\** (adjust Blender version to your need)
 
 For portable version of Blender:
-- Inside the blender folder: Create a folder called "**portable**"
+- Inside the blender folder (the same location than the blender.exe): Create a folder called "**portable**"
 - Unzip the content of **HeavyPoly Config** inside (folder Config and Scripts)
 
 

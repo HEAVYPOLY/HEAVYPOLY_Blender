@@ -190,77 +190,46 @@ class HP_OT_PushAndSlide(bpy.types.Operator):
 
 
 class HP_OT_extrude(Operator):
-    """Context Sensitive Extrude"""
     bl_label = "Context Sensitive Extrude"
     bl_idname = "mesh.hp_extrude"
     bl_options = {'REGISTER', 'UNDO'}
+
     @classmethod
     def poll(cls, context):
         obj = context.active_object
         return (obj is not None and obj.mode == 'EDIT')
 
-    def modal(self, context, event):
-        if event.type == 'MOUSEMOVE':
-            return {'RUNNING_MODAL'}
-
-        if event.type in {'LEFTMOUSE', 'RET'}:
-            return {'FINISHED'}
-
-        if event.type in {'RIGHTMOUSE', 'ESC'}:
-            return {'CANCELLED'}
-
-        return {'RUNNING_MODAL'}
-
     def invoke(self, context, event):
-
         if bpy.context.object.type == 'CURVE':
             bpy.ops.curve.extrude()
             bpy.ops.transform.translate('INVOKE_DEFAULT')
-            print('EXTRUDING CURVES')
             return {'FINISHED'}
+
         mesh = context.object.data
         selface = mesh.total_face_sel
         seledge = mesh.total_edge_sel
         selvert = mesh.total_vert_sel
-        # Nothing Selected
+
         if selvert == 0:
-            bpy.ops.mesh.select_mode(type = 'VERT')
+            bpy.ops.mesh.select_mode(type='VERT')
             bpy.ops.mesh.dupli_extrude_cursor('INVOKE_DEFAULT')
-            print('PLACING VERT')
             return {'FINISHED'}
         if selvert > 0 and seledge == 0:
-            print('EXTRUDING VERTS')
             bpy.ops.mesh.extrude_region_move('INVOKE_DEFAULT')
             return {'FINISHED'}
         if seledge > 0 and selface == 0:
-            print('EXTRUDING EDGES')
             bpy.ops.mesh.extrude_region_move('INVOKE_DEFAULT')
             return {'FINISHED'}
-	
 
-        # Save Selection
-       
-        print('Linked Selection Saved')
-        mesh = context.object.data
-        linkedface = mesh.total_face_sel
-        print(linkedface)
-
-
-        print('EXTRUDING FACES')
         bpy.ops.mesh.extrude_region_move('EXEC_DEFAULT')
 
-        if linkedface != selface:
-            print('Partial mesh selected')
+        if mesh.total_face_sel != selface:
             bpy.ops.transform.shrink_fatten('INVOKE_DEFAULT', use_even_offset=True)
             return {'FINISHED'}
 
-        context.window_manager.modal_handler_add(self)
-        if selface > 0:
-            print('Extruding Faces w vertex group')
-            bpy.ops.transform.shrink_fatten('INVOKE_DEFAULT', use_even_offset=True)
-            print('FIXING NORMALS')
-            return {'RUNNING_MODAL'}
-        return {'RUNNING_MODAL'}
+        bpy.ops.transform.shrink_fatten('INVOKE_DEFAULT', use_even_offset=True)
+        return {'FINISHED'}
+
     
 
 class HP_OT_SmartScale(Operator):
@@ -592,6 +561,78 @@ class HP_TranslateModalOperator(bpy.types.Operator):
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
+class OBJECT_OT_set_camera_off_wire(bpy.types.Operator):
+    """Turn OFF Camera Visibility, Display as WIRE, Shadow ON"""
+    bl_idname = "object.set_camera_off_wire"
+    bl_label = "Hide From Camera (Wire Display)"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == 'OBJECT' and context.selected_objects
+
+    def execute(self, context):
+        is_cycles = context.scene.render.engine == 'CYCLES'
+        for obj in context.selected_objects:
+            if hasattr(obj, "visible_camera"):
+                obj.visible_camera = False
+            if is_cycles and hasattr(obj, "visible_shadow"):
+                obj.visible_shadow = True
+            obj.display_type = 'WIRE'
+        self.report({'INFO'}, "Camera visibility OFF, Display as WIRE.")
+        return {'FINISHED'}
+
+class OBJECT_OT_set_camera_on_textured(bpy.types.Operator):
+    """Turn ON Camera Visibility, Display as TEXTURED"""
+    bl_idname = "object.set_camera_on_textured"
+    bl_label = "Show in Camera (Textured Display)"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == 'OBJECT' and context.selected_objects
+
+    def execute(self, context):
+        for obj in context.selected_objects:
+            if hasattr(obj, "visible_camera"):
+                obj.visible_camera = True
+            obj.display_type = 'TEXTURED'
+        self.report({'INFO'}, "Camera visibility ON, Display as TEXTURED.")
+        return {'FINISHED'}
+
+class OBJECT_OT_select_camera_hidden(bpy.types.Operator):
+    """Select all geometry objects with Camera Visibility OFF"""
+    bl_idname = "object.select_camera_hidden"
+    bl_label = "Select Hidden From Camera"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.object.select_all(action='DESELECT')
+        count = 0
+        geometry_types = {'MESH', 'CURVE', 'SURFACE', 'META', 'FONT'}
+
+        for obj in context.scene.objects:
+            if (
+                obj.type in geometry_types
+                and hasattr(obj, "visible_camera")
+                and not obj.visible_camera
+            ):
+                obj.select_set(True)
+                count += 1
+
+        self.report({'INFO'}, f"Selected {count} camera-hidden geometry objects.")
+        return {'FINISHED'}
+
+
+
+
+def draw_func(self, context):
+    layout = self.layout
+    layout.separator()
+    layout.operator("object.set_camera_off_wire", icon='HIDE_ON')
+    layout.operator("object.set_camera_on_textured", icon='HIDE_OFF')
+    layout.operator("object.select_camera_hidden", icon='RESTRICT_VIEW_ON')
+
 
 classes = (
     HP_OT_SaveWithoutPrompt,
@@ -613,9 +654,22 @@ classes = (
     HP_OT_unhide,
     HP_OT_SetCollectionCenter,
     HP_TranslateModalOperator,
+    OBJECT_OT_set_camera_off_wire,
+    OBJECT_OT_set_camera_on_textured,
+    OBJECT_OT_select_camera_hidden,
 
 )
-register, unregister = bpy.utils.register_classes_factory(classes)
+#register, unregister = bpy.utils.register_classes_factory(classes)
+
+def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+    bpy.types.VIEW3D_MT_object_context_menu.append(draw_func)
+
+def unregister():
+    for cls in reversed(classes):
+        bpy.utils.unregister_class(cls)
+    bpy.types.VIEW3D_MT_object_context_menu.remove(draw_func)
 
 if __name__ == "__main__":
     register()

@@ -39,7 +39,7 @@ Custom scripts and pie menus to make Blender faster and easier to use — design
    ```
    portable
    ```
-3. Unzip the HEAVYPOLY config and copy the folders ( Config and Scripts) into the "portable" folder you just created — you should now have:
+3. Unzip the `HEAVYPOLY Config` and copy the folders ( Config and Scripts) into the "portable" folder you just created — you should now have:
    ```
    blender-folder/
      └─ portable/
@@ -60,7 +60,7 @@ Custom scripts and pie menus to make Blender faster and easier to use — design
    ```
    portable
    ```
-4. Unzip the `HEAVYPOLY Config` into this folder — you should now have:
+4. Unzip the `HEAVYPOLY Config` and copy the folders ( Config and Scripts) into the "portable" folder you just created — you should now have:
    ```
    Blender.app/
      └─ Contents/

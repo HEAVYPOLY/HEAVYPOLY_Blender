@@ -19,7 +19,7 @@ For installed version of  Blender:
 
 For portable version of Blender:
 - Inside the blender folder: Create a folder called "**portable**"
-- - Unzip the content of **HeavyPoly Config** inside (folder Config and Scripts)
+- Unzip the content of **HeavyPoly Config** inside (folder Config and Scripts)
 
 
 

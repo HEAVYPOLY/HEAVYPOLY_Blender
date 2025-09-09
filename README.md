@@ -19,19 +19,7 @@ Custom scripts and pie menus to make Blender faster and easier to use — design
   [Download older release](https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases)
 
 ---
-
-## 🖥 Installation Guide
-
 ### 🔹 Windows
-
-#### For the **installed version** of Blender:
-1. Unzip the downloaded `HEAVYPOLY Config`.
-2. Copy the folders named `config` and `scripts` into:  
-   ```
-   C:\Users\YOURUSERNAME\AppData\Roaming\Blender Foundation\Blender\4.3\
-   ```
-   > ⚠️ Replace `4.3` with your actual Blender version.  
-   > ⚠️ The `AppData` folder is hidden. Enable **"Show hidden files"** in your File Explorer settings to see it.
 
 #### For the **portable version** of Blender:
 1. Open the folder where `blender.exe` is located.
@@ -46,8 +34,18 @@ Custom scripts and pie menus to make Blender faster and easier to use — design
          ├─ config/
          └─ scripts/
    ```
+   
+#### For the **installed version** of Blender:
+1. Unzip the downloaded `HEAVYPOLY Config`.
+2. Copy the folders named `config` and `scripts` into:  
+   ```
+   C:\Users\YOURUSERNAME\AppData\Roaming\Blender Foundation\Blender\4.3\
+   ```
+   > ⚠️ Replace `4.3` with your actual Blender version.  
+   > ⚠️ The `AppData` folder is hidden. Enable **"Show hidden files"** in your File Explorer settings to see it.
 
----
+
+
 
 ### 🔹 macOS
 

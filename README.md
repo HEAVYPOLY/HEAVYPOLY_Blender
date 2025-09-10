@@ -1,38 +1,75 @@
-# HEAVYPOLY_Blender
 
-Scripts and Pie Menus designed to make Blender more streamlined.  Designed for use with pen tablet or mouse.  Also friendly for righty and lefty.
+# HEAVYPOLY for Blender
+
+Custom scripts and pie menus to make Blender faster and easier to use — designed for pen tablet or mouse. Works well for both left- and right-handed artists.
+
+---
+
+## 💾 Download Instructions
+
+### Blender Versions
+
+- **Blender 4.3 and above**  
+  ➡️ Click the green **`Code`** button at the top right of this page, then select **`Download ZIP`**.
+
+- **Blender 4.1 and 4.2**  
+  [Download v1.0.0](https://github.com/Renart84/HEAVYPOLY_Blender/releases/tag/v1.0.0)
+
+- **Blender 3.6 and 4.0**  
+  [Download older release](https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases)
+
+---
+### 🔹 Windows
+
+#### For the **portable version** of Blender:
+1. Open the folder where `blender.exe` is located.
+2. Create a new folder named:
+   ```
+   portable
+   ```
+3. Unzip the `HEAVYPOLY Config` and copy the folders ( Config and Scripts) into the "portable" folder you just created — you should now have:
+   ```
+   blender-folder/
+     └─ portable/
+         ├─ config/
+         └─ scripts/
+   ```
+   
+#### For the **installed version** of Blender:
+1. Unzip the downloaded `HEAVYPOLY Config`.
+2. Copy the folders named `config` and `scripts` into:  
+   ```
+   C:\Users\YOURUSERNAME\AppData\Roaming\Blender Foundation\Blender\4.3\
+   ```
+   > ⚠️ Replace `4.3` with your actual Blender version.  
+   > ⚠️ The `AppData` folder is hidden. Enable **"Show hidden files"** in your File Explorer settings to see it.
 
 
-Download Instructions:
- 
-
-Blender 4.3 and above - Click the Green button at top right, then download zip
-
-Blender 4.1 and 4.2 -https://github.com/Renart84/HEAVYPOLY_Blender/releases/tag/v1.0.0
-
-Blender 3.6 and 4.0 - https://github.com/HEAVYPOLY/HEAVYPOLY_Blender/releases
 
 
+### 🔹 macOS
 
-Windows install:
-- Unzip the **HeavyPoly Config**
-- Copy the folders "**Config**" and "**Scripts**" at this location:
+1. In the **Applications** folder, right-click on the Blender app and choose **"Show Package Contents"**.
+2. Go to:
+   ```
+   Contents/Resources
+   ```
+3. Create a folder named:
+   ```
+   portable
+   ```
+4. Unzip the `HEAVYPOLY Config` and copy the folders ( Config and Scripts) into the "portable" folder you just created — you should now have:
+   ```
+   Blender.app/
+     └─ Contents/
+         └─ Resources/
+             └─ portable/
+                 ├─ config/
+                 └─ scripts/
+   ```
 
-For portable version of Blender (.zip) : **ExtractedBlenderfolder\x.x\**
-/!\ for Blender 4.3, you have to create a new folder "portable" at the root of where you've extracted Blender, meaning at the same location than the Blender.exe ( blender-4.3.2-windows-x64\portable ) And you copy both Config and Scripts folder inside.
+---
 
-For installed version of  Blender (.exe) :  **C:\Users\ %USERPROFILE% \AppData\Roaming\Blender Foundation\Blender\x.x\** (adjust Blender version to your need.
-(Or other Blender version)
+## 🎥 Setup Video (for Blender 3.6 – 4.1)
 
-
-
-Mac install:
-- You need to have launched Blender once first.
-- Right click on the Blender Application and chose **Show Package Content**
-- Go to Content/Ressources/x.x (For Blender 4.3, create a folder called "portable" instead of going inside of the folder 4.3. Content/Ressources/portable)
-- Unzip the **HeavyPoly Config**
-- Copy the folders "**Config**" and "**Scripts**" inside of the folder you just opened.  You can use Shift+ Command when you drag and drop between two finders)
-
-
-
-Old Install Video  for Blender 3.6 to 4.1 :  https://www.youtube.com/watch?v=TRESMUenxa8
+[Watch the installation tutorial on YouTube](https://www.youtube.com/watch?v=TRESMUenxa8)

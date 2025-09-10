@@ -152,7 +152,7 @@ def add_smooth_by_angle(obj):
         print(f"Skipping '{obj.name}' (not a mesh object).")
         return
 
-    angle = math.radians(40)
+    angle = math.radians(25)
 
     # Check if the object already has a "Smooth by Angle" modifier
     existing_modifier = next((mod for mod in obj.modifiers if mod.name == "Smooth by Angle"), None)
